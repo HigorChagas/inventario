@@ -6,7 +6,7 @@
         <title>Inventário</title>
         <link rel="stylesheet" href="css/main.css">
     </head>
-    <body>
+    <body>        
         <nav class="navbar bg-body-secondary">
             <div class="container">
                 <a href="" class="navbar-brand">
@@ -15,7 +15,7 @@
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
                         <a
-                            href="#"
+                            href="./"
                             class="nav-link active link-success"
                             aria-current="page"
                             >Home</a
@@ -30,7 +30,7 @@
         <section class="container">
             <h1 class="display-2 text-center">Inventário</h1>
             <p class="lead text-center">Cadastro de equipamento</p>
-            <form class="row g-3 needs-validation" novalidate>
+            <form class="row g-3 needs-validation" method="post" action="/add" novalidate>
                 <div class="row g-4 align-items-center mb-3">
                     <div
                         class="col-12 text-center row mt-4 justify-content-center"
@@ -46,7 +46,8 @@
                                 name="input-unidade"
                                 id="input-unidade"
                                 class="form-select"
-                                required
+                                
+            
                             >
                                 <option selected>Selecione a unidade</option>
                                 <option value="Piancó">Piancó</option>
@@ -65,7 +66,8 @@
                         id="input-patrimonio"
                         class="form-control"
                         placeholder="Patrimônio"
-                        required
+                        
+    
                     />
                     <div class="invalid-feedback">
                         Por favor, digite um valor
@@ -81,7 +83,8 @@
                         id="input-descricao"
                         class="form-control"
                         placeholder="Descrição"
-                        required
+                        
+    
                     />
                     <div class="invalid-feedback">
                         Por favor, digite um valor
@@ -97,7 +100,8 @@
                         id="input-usuario"
                         class="form-control"
                         placeholder="Nome do usuário"
-                        required
+                        
+    
                     />
                     <div class="invalid-feedback">
                         Por favor, digite um valor
@@ -111,7 +115,8 @@
                         id="input-modelo"
                         class="form-control"
                         placeholder="Modelo do equipamento"
-                        required
+                        
+    
                     />
                     <div class="invalid-feedback">
                         Por favor, digite um valor
@@ -127,7 +132,8 @@
                         id="input-departamento"
                         class="form-control"
                         placeholder="Departamento"
-                        required
+                        
+    
                     />
                     <div class="invalid-feedback">
                         Por favor, digite um valor
@@ -143,7 +149,8 @@
                         id="input-valor-compra"
                         class="form-control"
                         placeholder="R$"
-                        required
+                        
+    
                     />
                     <div class="invalid-feedback">
                         Por favor, digite um valor
@@ -158,7 +165,8 @@
                         name="input-serie"
                         id="input-serie"
                         class="form-control"
-                        required
+                        
+    
                     />
                     <div class="invalid-feedback">
                         Por favor, digite um valor
@@ -166,7 +174,7 @@
                     <div class=""></div>
                 </div>
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary" id="btn-add">
+                    <button type="submit" class="btn btn-primary">
                         Adicionar
                     </button>
                 </div>
@@ -175,8 +183,8 @@
         <section class="container-fluid mt-5">
             <table class="table table-hover table-striped table-dark" id="table">
                 <thead>
-                    <th scope="col">Unidade</th>
                     <th scope="col">Patrimônio</th>
+                    <th scope="col">Unidade</th>
                     <th scope="col">Descrição</th>
                     <th scope="col">Usuário</th>
                     <th scope="col">Modelo</th>
@@ -185,34 +193,31 @@
                     <th scope="col">Nº de série</th>
                     <th scope="col">Ações</th>
                 </thead>
-                <tbody class="table-group-divider">
-                    <tr>
-                        <th>034</th>
-                        <td>Higor Chagas</td>
-                        <td>Monitor Dell</td>
-                        <td>Dell AH421</td>
-                        <td>Contábil</td>
-                        <td>1200</td>
-                        <td>42587547489</td>
-                        <td>Piancó</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">
+                <tbody class="table-group-divider">                    
+                    <% for(element of listagem) { %>
+                        <tr>
+                            <th><%= element.patrimonio %></th>
+                            <th><%= element.unidade %></th>
+                            <th><%= element.descricao %></th>
+                            <th><%= element.usuario %></th>
+                            <th><%= element.modelo %></th>
+                            <th><%= element.localizacao %></th>
+                            <th><%= element.valorestim %></th>
+                            <th><%= element.nserie %></th>
+                            <th><button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">
                                 Editar
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger">Excluir</button>
-                        </td>
-                    </tr>
+                            <a href='/delete/<% element.patrimonio %>' class="btn btn-sm btn-danger">Excluir</a>
+                            </th>
+                        </tr>                      
+                    <% }; %>
                 </tbody>
             </table>
         </div>
         <footer class="container-fluid mt-5 text-center">
-            <p class="lead fw-semibold mb-1">Copyright (c) 2023 Higor Chagas</p>
-            <a href="https://github.com/HigorChagas" target="_brank">
-                <i class="bi bi-github fs-3 text-dark"></i>
-            </a>
+            
         </footer>
-
-        <!-- Modal -->
+        
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -255,7 +260,8 @@
                                 id="input-patrimonio"
                                 class="form-control"
                                 placeholder="Patrimônio"
-                                required
+                                
+            
                             />
                         </div>
                         <div class="col-md-6">
@@ -268,7 +274,8 @@
                                 id="input-descricao"
                                 class="form-control"
                                 placeholder="Descrição"
-                                required
+                                
+            
                             />
                         </div>
                         <div class="col-md-12">
@@ -281,7 +288,8 @@
                                 id="input-usuario"
                                 class="form-control"
                                 placeholder="Nome do usuário"
-                                required
+                                
+            
                             />
                         </div>
                         <div class="col-md-12">
@@ -292,7 +300,8 @@
                                 id="input-modelo"
                                 class="form-control"
                                 placeholder="Modelo do equipamento"
-                                required
+                                
+            
                             />
                         </div>
                         <div class="col-md-6">
@@ -305,7 +314,8 @@
                                 id="input-departamento"
                                 class="form-control"
                                 placeholder="Departamento"
-                                required
+                                
+            
                             />
                         </div>
                         <div class="col-md-6">
@@ -318,7 +328,8 @@
                                 id="input-valor-compra"
                                 class="form-control"
                                 placeholder="R$"
-                                required
+                                
+            
                             />
                         </div>
                         <div class="col-md-12">
@@ -330,7 +341,8 @@
                                 name="input-serie"
                                 id="input-serie"
                                 class="form-control"
-                                required
+                                
+            
                             />
                             <div class=""></div>
                         </div>
@@ -338,7 +350,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                  <button type="button" class="btn btn-primary">Editar</button>
+                  <a href='#' class="btn btn-primary">Editar</a>
                 </div>
               </div>
             </div>
@@ -348,6 +360,7 @@
         <script src="js/bootstrap.bundle.js"></script>
         <script src="js/scripts.js"></script>
         <script>
+
             // Example starter JavaScript for disabling form submissions if there are invalid fields
             (function () {
             'use strict'
