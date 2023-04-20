@@ -2,7 +2,6 @@ require('dotenv').config();
 
 async function connect() {
     if (global.connection && global.connection.state !== 'disconnected') {
-        console.log('aconteceu algum erro');
         return global.connection;
     } else {
         const mysql = require('mysql2/promise');
