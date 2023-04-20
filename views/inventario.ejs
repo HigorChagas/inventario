@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -180,7 +180,12 @@
                 </div>
             </form>
         </section>
+        
         <section class="container-fluid mt-5">
+            <div class="container mb-5 col-md-4 d-flex">
+                <input type="text" name="input-filter" id="input-filter" class="form-control">
+                <a href="" target="_blank" class="btn btn-info ms-3" id="filter-btn">Pesquisar</a>
+            </div>
             <table class="table table-hover table-striped table-dark" id="table">
                 <thead>
                     <th scope="col">Patrimônio</th>
@@ -207,9 +212,9 @@
                             <th><button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">
                                 Editar
                             </button>
-                            <a href='/delete/<% element.patrimonio %>' class="btn btn-sm btn-danger">Excluir</a>
+                            <a href="/delete/<%= element.patrimonio %>" class="deletar btn btn-sm btn-danger">Excluir</a>
                             </th>
-                        </tr>                      
+                        </tr>               
                     <% }; %>
                 </tbody>
             </table>
@@ -325,12 +330,11 @@
                             <input
                                 type="number"
                                 name="input-valor-compra"
-                                id="input-valor-compra"
+                                id="modal-valor-compra"
                                 class="form-control"
-                                placeholder="R$"
-                                
-            
+                                placeholder="R$" 
                             />
+                            <% %>
                         </div>
                         <div class="col-md-12">
                             <label for="input-serie" class="form-label"
@@ -366,7 +370,7 @@
             'use strict'
 
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.querySelectorAll('.needs-validation')
+            const forms = document.querySelectorAll('.needs-validation')
 
             // Loop over them and prevent submission
             Array.prototype.slice.call(forms)
