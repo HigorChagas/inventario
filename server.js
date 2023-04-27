@@ -13,6 +13,11 @@ app.set('view engine', 'ejs');
 //implementação da verificação de login
 app.use(bodyparser.urlencoded({ extended: true }));
 
+//carregamento das pastas de programa
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/private'));
+
+
 //inicio da aplicação com select no banco
 app.get('/', async (req, res) => {
     const listagem = await db.showInventario();
@@ -35,9 +40,6 @@ app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });
 
-//carregamento das pastas de programa
-app.use(express.static(__dirname + '/public'));
-app.use(express.static(__dirname + '/private'));
 
 //rotas das funções
 app.get('/:id', async (req, res) => {
