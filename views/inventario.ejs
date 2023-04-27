@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Inventário</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/custom.css">
 </head>
 
 <body>
@@ -32,8 +33,8 @@
                 <div class="col-12 text-center row mt-4 justify-content-center">
                     <label for="input-unidade" id="inputUnidade" class="col-form-label">Unidade</label>
                     <div class="col-6">
-                        <select name="input-unidade" id="input-unidade" class="form-select">
-                            <option selected>Selecione a unidade</option>
+                        <select required name="input-unidade" id="input-unidade" class="form-select">
+                            <option selected>Selecione a unidade...</option>
                             <option value="Piancó">Piancó</option>
                             <option value="Orfanato">Orfanato</option>
                         </select>
@@ -43,7 +44,7 @@
             <div class="col-md-6">
                 <label for="input-patrimonio" class="form-label">Patrimônio</label>
                 <input type="number" name="input-patrimonio" id="input-patrimonio" class="form-control"
-                    placeholder="Patrimônio" />
+                    placeholder="Patrimônio" required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
                 </div>
@@ -51,7 +52,7 @@
             <div class="col-md-6">
                 <label for="input-descricao" class="form-label">Descrição</label>
                 <input type="text" name="input-descricao" id="input-descricao" class="form-control"
-                    placeholder="Descrição" />
+                    placeholder="Descrição" required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
                 </div>
@@ -59,7 +60,7 @@
             <div class="col-md-12">
                 <label for="input-usuario" class="form-label">Usuário</label>
                 <input type="text" name="input-usuario" id="input-usuario" class="form-control"
-                    placeholder="Nome do usuário" />
+                    placeholder="Nome do usuário" required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
                 </div>
@@ -67,7 +68,7 @@
             <div class="col-md-12">
                 <label for="input-modelo" class="form-label">Modelo</label>
                 <input type="text" name="input-modelo" id="input-modelo" class="form-control"
-                    placeholder="Modelo do equipamento" />
+                    placeholder="Modelo do equipamento" required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
                 </div>
@@ -75,7 +76,7 @@
             <div class="col-md-6">
                 <label for="input-departamento" class="form-label">Departamento</label>
                 <input type="text" name="input-departamento" id="input-departamento" class="form-control"
-                    placeholder="Departamento" />
+                    placeholder="Departamento" required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
                 </div>
@@ -83,14 +84,14 @@
             <div class="col-md-3">
                 <label for="input-valor-compra" class="form-label">Valor da compra</label>
                 <input type="text" name="input-valor-compra" id="input-valor-compra" class="form-control"
-                    placeholder="R$" />
+                    placeholder="R$" required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
                 </div>
             </div>
             <div class="col-md-3">
                 <label for="input-serie" class="form-label">Nº de série</label>
-                <input type="number" name="input-serie" id="input-serie" class="form-control" />
+                <input type="number" name="input-serie" id="input-serie" class="form-control" required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
                 </div>
@@ -143,7 +144,7 @@
                             <%= element.localizacao %>
                         </th>
                         <th>
-                            <%= element.valorestim %>
+                            R$ <%= element.valorestim %>
                         </th>
                         <th>
                             <%= element.nserie %>

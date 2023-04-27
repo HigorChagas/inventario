@@ -1,0 +1,22 @@
+/* Print Custom CSS*/
+@media print {
+    * {
+        background: transparent;
+        color: #000;
+        text-shadow: none;
+        filter: none;
+        -ms-filter: none;
+    }
+
+    .container,
+    .navbar,
+    #input-filter,
+    #filter-btn {
+        display: none;
+    }
+
+    th:last-child {
+        display: none;
+    }
+
+}

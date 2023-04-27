@@ -1,4 +1,3 @@
-//constantes de codigo
 const express = require('express');
 const db = require('./private/js/db');
 const app = express();
@@ -17,6 +16,10 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/private'));
 
+//rodando na porta
+app.listen(port, () => {
+    console.log(`Servidor rodando na porta ${port}`);
+});
 
 //inicio da aplicação com select no banco
 app.get('/', async (req, res) => {
@@ -34,12 +37,6 @@ app.get('/', async (req, res) => {
 app.post('/', (req, res) => {
     res.render('inventario');
 });
-
-//rodando na porta
-app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
-});
-
 
 //rotas das funções
 app.get('/:id', async (req, res) => {
@@ -72,16 +69,20 @@ app.get('/:id', async (req, res) => {
 
 app.post('/add', async (req, res) => {
     const input = JSON.parse(JSON.stringify(req.body));
+    const valorCompra = input['input-valor-compra'].replace('R$', '').trim('').replace(/\./g, '').replace(',', '.');
     const data = {
         patrimonio: input['input-patrimonio'],
         unidade: input['input-unidade'],
         descricao: input['input-descricao'],
         modelo: input['input-modelo'],
         localizacao: input['input-departamento'],
-        valorestim: input['input-valor-compra'],
+        valorestim: valorCompra,
         usuario: input['input-usuario'],
         nserie: input['input-serie'],
     };
+
+    console.log(valorCompra);
+    console.log({ data });
 
     try {
         const connection = await db.connect();
@@ -98,6 +99,7 @@ app.post('/add', async (req, res) => {
         res.status(200);
         res.redirect('/');
     } catch (error) {
+        console.log(error);
         res.status(500).send({
             mensagem: 'Ocorreu um erro ao inserir os dados',
         });
@@ -152,45 +154,5 @@ app.get('/delete/:id', async (req, res) => {
     }
 });
 
-// app.delete('/delete/:id', async (req, res) => {
-//     const userId = req.params.id;
-//     try {
-//         const connection = await db.connect();
-//         await connection.query(
-//             'DELETE FROM Inventario WHERE patrimonio=?;',
-//             userId,
-//             (err, rows) => {
-//                 if (err) {
-//                     console.log('Erro ao deletar');
-//                 }
-//             }
-//         );
-//         res.status(200).send('Dados excluídos com sucesso');
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('Ocorreu um erro ao excluir os dados');
-//     }
-// });
-
 //carregando bodyparser com json
 app.use(bodyparser.json());
-
-//validação
-app.post(
-    '/user',
-    [
-        body('username')
-            .isLength({ min: 5, max: 50 })
-            .withMessage('Usuário não está correto!'),
-        body('password')
-            .isLength({ min: 5, max: 50 })
-            .withMessage('Senha não está correta'),
-    ],
-    (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        res.json({ msg: 'sucesso' });
-    }
-);
