@@ -6,27 +6,25 @@ const bodyparser = require('body-parser');
 const { body, validationResult } = require('express-validator');
 const { listarItem } = require('./private/js/db');
 
-//carregamento da engine ejs
+app.use(bodyparser.json());
+
 app.set('view engine', 'ejs');
 
-//implementação da verificação de login
 app.use(bodyparser.urlencoded({ extended: true }));
 
-//carregamento das pastas de programa
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/private'));
 
-//rodando na porta
+//Localhost
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });
 
-//inicio da aplicação com select no banco
+//Search Route
 app.get('/', async (req, res) => {
     const listagem = await db.showInventario();
     const input = JSON.parse(JSON.stringify(req.body));
     const id = input['input-filter'];
-    console.log(id);
 
     res.render('../views/inventario', {
         listagem: listagem,
@@ -154,5 +152,3 @@ app.get('/delete/:id', async (req, res) => {
     }
 });
 
-//carregando bodyparser com json
-app.use(bodyparser.json());
