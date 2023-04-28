@@ -20,9 +20,13 @@ function tableFilter() {
     const input = document.getElementById('input-filter');
     button.addEventListener('click', (event) => {
         const dados = input.value;
-        const url = `${dados}`;
-        button.setAttribute('href', url);
-        button.click();
+        if (!dados) {
+            return console.log('Teste');
+        } else {
+            const url = `${dados}`;
+            button.setAttribute('href', url);
+            button.click();
+        }
     });
 }
 
