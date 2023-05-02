@@ -11,6 +11,7 @@ router.get('/', async (req, res) => {
     res.render('../views/inventario', {
         listagem: listagem,
         id: id,
+        item: {}
     });
 });
 
@@ -28,6 +29,7 @@ router.get('/:id', async (req, res) => {
             res.render('../views/inventario', {
                 listagem: rows,
                 itemId: req.params.id,
+                item: {}
             });
         }
     } catch (error) {

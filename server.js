@@ -22,26 +22,18 @@ app.post('/', (req, res) => {
     res.render('inventario');
 });
 
-app.post('/edit/:id', async (req, res) => {
+app.post('/items/:id', async (req, res) => {
     try {
+        const itemId = req.params.id;
+        const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;
+
         const connection = await db.connect();
         await connection.query(
             'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=? WHERE patrimonio=?;',
-            [
-                req.body.unidade,
-                req.body.descricao,
-                req.body.modelo,
-                req.body.localizacao,
-                req.body.valorestim,
-                req.body.usuario,
-                req.body.nserie,
-                req.params.id,
-            ]
+            [unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, itemId]
         );
-        connect.release();
-        res.status(200).send({
-            mensagem: 'Dados atualizados com sucesso',
-        });
+        connection.end();
+        res.redirect('/');
     } catch (error) {
         console.log(error);
         res.status(500).send({
@@ -49,5 +41,52 @@ app.post('/edit/:id', async (req, res) => {
         });
     }
 });
+
+// app.post('/edit/:id', async (req, res) => {
+//     try {
+//         const connection = await db.connect();
+//         await connection.query(
+//             'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=? WHERE patrimonio=?;',
+//             [
+//                 req.body.unidade,
+//                 req.body.descricao,
+//                 req.body.modelo,
+//                 req.body.localizacao,
+//                 req.body.valorestim,
+//                 req.body.usuario,
+//                 req.body.nserie,
+//                 req.params.id,
+//             ]
+//         );
+//         connection.end();
+//         res.status(200).send({
+//             mensagem: 'Dados atualizados com sucesso',
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).send({
+//             mensagem: 'Ocorreu um erro ao atualizar os dados',
+//         });
+//     }
+// });
+
+app.get('/api/items/:id', async (req, res) => {
+    try {
+        const itemId = req.params.id;
+        const connection = await db.connect();
+        const result = await connection.query(
+            'SELECT * FROM Inventario WHERE patrimonio = ?',
+            [itemId]
+        );
+        connection.end();
+        res.json(result[0]);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            mensagem: 'Ocorreu um erro ao buscar as informações do item'
+        });
+    }
+});
+
 
 

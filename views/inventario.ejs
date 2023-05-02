@@ -68,7 +68,7 @@
             </div>
             <div class="col-md-3">
                 <label for="input-serie" class="form-label">Nº de série</label>
-                <input type="number" placeholder="Nº série" name="input-serie" id="input-serie" class="form-control"
+                <input type="text" placeholder="Nº série" name="input-serie" id="input-serie" class="form-control"
                     required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
@@ -130,8 +130,9 @@
                         <th>
                             <%= element.nserie %>
                         </th>
-                        <th><button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                data-bs-target="#editModal">
+                        <th><button type="button" class="btn btn-sm btn-warning" id="edit-item-btn"
+                                data-bs-toggle="modal" data-bs-target="#editModal"
+                                data-item-id="<%= element.patrimonio %>">
                                 Editar
                             </button>
                             <a href="/delete/<%= element.patrimonio %>"
