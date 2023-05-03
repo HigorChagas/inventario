@@ -19,27 +19,43 @@ const editarItems = () => {
     const editItemBtns = document.querySelectorAll('#edit-item-btn');
 
     editItemBtns.forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-            const itemId = e.target.dataset.itemId;
+        btn.addEventListener('click', async (event) => {
+            const itemId = event.target.dataset.itemId;
             console.log('itemId:', itemId);
             const response = await fetch(`/api/items/${itemId}`);
             const data = await response.json();
 
             data.forEach(data => {
-                document.querySelector('#patrimonio').value = data?.patrimonio ?? 'Nada';;
-                document.querySelector('#unidade').value = data?.unidade ?? 'Nada';;
-                document.querySelector('#descricao').value = data?.descricao ?? 'Nada';;
-                document.querySelector('#modelo').value = data?.modelo ?? 'Nada';;
-                document.querySelector('#localizacao').value = data?.localizacao ?? 'Nada';;
-                document.querySelector('#valorestim').value = data?.valorestim ?? 'Nada';;
+                document.querySelector('#patrimonio').value = data?.patrimonio ?? 'Nada';
+                document.querySelector('#unidade').value = data?.unidade ?? 'Nada';
+                document.querySelector('#descricao').value = data?.descricao ?? 'Nada';
+                document.querySelector('#modelo').value = data?.modelo ?? 'Nada';
+                document.querySelector('#localizacao').value = data?.localizacao ?? 'Nada';
+                document.querySelector('#valorestim').value = data?.valorestim ?? 'Nada';
                 document.querySelector('#usuario').value = data?.usuario ?? 'Nada';
                 document.querySelector('#nserie').value = data?.nserie ?? 'Nada';
             });
-
         });
     })
 }
 editarItems();
+
+const formSubmit = () => {
+    const form = document.querySelector('#modal-form');
+    const formBtn = form.querySelector('[type="submit"]');
+    const patrimonio = form.querySelector('#patrimonio');
+    formBtn.addEventListener('click', (event) => {
+        const itemId = parseInt(10, patrimonio.value)
+        if (typeof itemId !== 'number') return;
+        event.preventDefault();
+        const newRoute = `/items/${itemId}`;
+        console.log(newRoute);
+        form.setAttribute('action', newRoute);
+        form.submit();
+    });
+}
+
+formSubmit();
 
 function tableFilter() {
     const button = document.getElementById('filter-btn');
@@ -56,10 +72,9 @@ function tableFilter() {
     });
 }
 
-
 tableFilter();
 
-const inputValor = document.querySelector('#input-valor-compra');
+const inputValor = document.querySelectorAll('input[name=input-valor-compra]');
 
 const formatarValor = (valor) => {
     valor = valor.replace(/\D/g, '');
@@ -68,13 +83,18 @@ const formatarValor = (valor) => {
     return valor;
 };
 
-inputValor.addEventListener('input', (event) => {
-    const valor = event.target.value;
-    const valorFormatado = formatarValor(valor);
-    event.target.value = valorFormatado;
-});
+inputValor.forEach(value => {
+    value.addEventListener('input', (event) => {
+        const valor = event.target.value;
+        const valorFormatado = formatarValor(valor);
+        event.target.value = valorFormatado;
+    });
+})
 
 formatarValor();
+
+
+
 
 
 

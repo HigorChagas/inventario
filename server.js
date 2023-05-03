@@ -23,6 +23,7 @@ app.post('/', (req, res) => {
 });
 
 app.post('/items/:id', async (req, res) => {
+    console.log(req.body);
     try {
         const itemId = req.params.id;
         const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;

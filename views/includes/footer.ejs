@@ -2,76 +2,7 @@
 
 </footer>
 
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5 text-center id=" editar-equipamento">Editar equipamento</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/items/<%= item.patrimonio %>" method="POST" class="row g-3 needs-validation"
-                    id="editarItemModal" novalidate>
-                    <div class="row g-4 align-items-center mb-3">
-                        <div class="col-12 text-center row mt-4 justify-content-center">
-                            <label for="input-unidade" id="unidade" class="col-form-label">Unidade</label>
-                            <div class="col-6">
-                                <select name="input-unidade" id="unidade" class="form-select">
-                                    <option selected value="<%= item.unidade %>" type="text"></option>
-                                    <option value="pianco">Piancó</option>
-                                    <option value="orfanato">Orfanato</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="input-patrimonio" class="form-label text-center">Patrimônio</label>
-                        <input type="number" name="input-patrimonio" id="patrimonio" value="<%= item.patrimonio %>"
-                            class="form-control" placeholder="Patrimônio" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="input-descricao" class="form-label">Descrição</label>
-                        <input type="text" name="input-descricao" id="descricao" value="<%= item.descricao %>"
-                            class="form-control" placeholder="Descrição">
-                    </div>
-                    <div class="col-md-12">
-                        <label for="input-usuario" class="form-label">Usuário</label>
-                        <input type="text" name="input-usuario" id="usuario" class="form-control"
-                            placeholder="Nome do usuário" value="<%= item.usuario %>">
-                    </div>
-                    <div class="col-md-12">
-                        <label for="input-modelo" class="form-label">Modelo</label>
-                        <input type="text" name="input-modelo" id="modelo" class="form-control"
-                            placeholder="Modelo do equipamento" value="<%= item.modelo %>">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="input-departamento" class="form-label">Departamento</label>
-                        <input type="text" name="input-departamento" id="localizacao" value="<%= item.departamento %>"
-                            class="form-control" placeholder="Departamento">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="input-valor-compra" class="form-label">Valor da compra</label>
-                        <input type="number" name="input-valor-compra" id="valorestim" value="<%= item.valorestim %>"
-                            class="form-control" placeholder="R$">
-                        <% %>
-                    </div>
-                    <div class="col-md-12">
-                        <label for="input-serie" class="form-label">Nº de série</label>
-                        <input type="text" name="input-serie" id="nserie" class="form-control"
-                            value="<%= item.nserie %>">
-                        <div class=""></div>
-                    </div>
-                    <div class="col-12">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                        <a class="btn btn-primary">Editar</a>
-                    </div>
-            </div>
-        </div>
-    </div>
-
-
+<%- include('modal') %>
     <script src="js/bootstrap.bundle.js"></script>
     <script src="js/scripts.js"></script>
     <script src="js/switch.js"></script>
