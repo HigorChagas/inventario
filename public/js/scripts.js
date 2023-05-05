@@ -45,11 +45,9 @@ const formSubmit = () => {
     const formBtn = form.querySelector('[type="submit"]');
     const patrimonio = form.querySelector('#patrimonio');
     formBtn.addEventListener('click', (event) => {
-        const itemId = parseInt(10, patrimonio.value)
+        const itemId = parseInt(patrimonio.value, 10);
         if (typeof itemId !== 'number') return;
-        event.preventDefault();
         const newRoute = `/items/${itemId}`;
-        console.log(newRoute);
         form.setAttribute('action', newRoute);
         form.submit();
     });
@@ -74,7 +72,7 @@ function tableFilter() {
 
 tableFilter();
 
-const inputValor = document.querySelectorAll('input[name=input-valor-compra]');
+const inputValor = document.querySelectorAll('input[name=valorestim]');
 
 const formatarValor = (valor) => {
     valor = valor.replace(/\D/g, '');

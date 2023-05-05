@@ -100,4 +100,46 @@ router.get('/delete/:id', async (req, res) => {
     }
 });
 
+//Edit Route
+router.post('/items/:id', async (req, res) => {
+    console.log(req.body);
+
+    try {
+        const itemId = req.params.id;
+        const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;
+        const currencyRegex = /[\D]/g;
+        const valorCompraNumerico = Number(valorestim.replace(currencyRegex, '').replace(',', '.'));
+        const connection = await db.connect();
+        await connection.query(
+            'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=? WHERE patrimonio=?;',
+            [unidade, descricao, modelo, localizacao, valorCompraNumerico, usuario, nserie, itemId]
+        );
+        connection.end();
+        res.redirect('/');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            mensagem: 'Ocorreu um erro ao atualizar os dados',
+        });
+    }
+});
+
+router.get('/api/items/:id', async (req, res) => {
+    try {
+        const itemId = req.params.id;
+        const connection = await db.connect();
+        const result = await connection.query(
+            'SELECT * FROM Inventario WHERE patrimonio = ?',
+            [itemId]
+        );
+        connection.end();
+        res.json(result[0]);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            mensagem: 'Ocorreu um erro ao buscar as informações do item'
+        });
+    }
+});
+
 module.exports = router;
