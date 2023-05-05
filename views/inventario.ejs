@@ -91,56 +91,58 @@
                 Por favor, digite um valor
             </div>
         </div>
-        <table class="table table-hover table-striped table-light" id="table">
-            <thead>
-                <th scope="col">Patrimônio</th>
-                <th scope="col">Unidade</th>
-                <th scope="col">Descrição</th>
-                <th scope="col">Usuário</th>
-                <th scope="col">Modelo</th>
-                <th scope="col">Departamento</th>
-                <th scope="col">Valor da Compra</th>
-                <th scope="col">Nº de série</th>
-                <th scope="col">Ações</th>
-            </thead>
-            <tbody class="table-group-divider">
-                <% for(element of listagem) { %>
-                    <tr>
-                        <th>
-                            <%= element.patrimonio %>
-                        </th>
-                        <th>
-                            <%= element.unidade %>
-                        </th>
-                        <th>
-                            <%= element.descricao %>
-                        </th>
-                        <th>
-                            <%= element.usuario %>
-                        </th>
-                        <th>
-                            <%= element.modelo %>
-                        </th>
-                        <th>
-                            <%= element.localizacao %>
-                        </th>
-                        <th>
-                            R$ <%= element.valorestim %>
-                        </th>
-                        <th>
-                            <%= element.nserie %>
-                        </th>
-                        <th><button type="button" class="btn btn-sm btn-warning" id="edit-item-btn"
-                                data-bs-toggle="modal" data-bs-target="#editModal"
-                                data-item-id="<%= element.patrimonio %>">
-                                Editar
-                            </button>
-                            <a href="/delete/<%= element.patrimonio %>"
-                                class="deletar btn btn-sm btn-danger">Excluir</a>
-                        </th>
-                    </tr>
-                    <% }; %>
-            </tbody>
-        </table>
+        <div class="table-responsive-md">
+            <table class="table table-hover table-striped table-light" id="table">
+                <thead>
+                    <th scope="col">Patrimônio</th>
+                    <th scope="col">Unidade</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Usuário</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Departamento</th>
+                    <th scope="col">Valor da Compra</th>
+                    <th scope="col">Nº de série</th>
+                    <th scope="col">Ações</th>
+                </thead>
+                <tbody class="table-group-divider">
+                    <% for(element of listagem) { %>
+                        <tr>
+                            <th>
+                                <%= element.patrimonio %>
+                            </th>
+                            <th>
+                                <%= element.unidade %>
+                            </th>
+                            <th>
+                                <%= element.descricao %>
+                            </th>
+                            <th>
+                                <%= element.usuario %>
+                            </th>
+                            <th>
+                                <%= element.modelo %>
+                            </th>
+                            <th>
+                                <%= element.localizacao %>
+                            </th>
+                            <th>
+                                R$ <%= element.valorestim %>
+                            </th>
+                            <th>
+                                <%= element.nserie %>
+                            </th>
+                            <th><button type="button" class="btn btn-sm btn-warning" id="edit-item-btn"
+                                    data-bs-toggle="modal" data-bs-target="#editModal"
+                                    data-item-id="<%= element.patrimonio %>">
+                                    Editar
+                                </button>
+                                <a href="/delete/<%= element.patrimonio %>"
+                                    class="deletar btn btn-sm btn-danger">Excluir</a>
+                            </th>
+                        </tr>
+                        <% }; %>
+                </tbody>
+            </table>
+        </div>
         </div>
         <%- include('includes/footer.ejs') %>
