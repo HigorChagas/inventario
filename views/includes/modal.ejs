@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark">
             <div class="modal-header justify-content-center">
-                <h1 class="modal-title fs-5 text-center id=" editar-equipamento">Editar equipamento</h1>
+                <h1 class="modal-title fs-5 text-center id="editar-equipamento">Editar equipamento</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -12,19 +12,19 @@
                         <div class="col-12 text-center row mt-4 justify-content-center">
                             <label for="unidade" id="unidade" class="col-form-label">Unidade</label>
                             <div class="col-6">
-                                <select name="unidade" id="unidade" value="<%= item.unidade %>" class="form-select">
+                                <select name="unidade" id="unidade" class="form-select">
                                     <option selected type="text">Selecione a unidade...
                                     </option>
-                                    <option value="Piancó">Piancó</option>
-                                    <option value="Orfanato">Orfanato</option>
+                                    <option value="Piancó" <% if (item.unidade === "Piancó") { %>selected<% } %>>Piancó</option>
+                                    <option value="Orfanato" <% if (item.unidade === "Orfanato") { %>selected<% } %>>Orfanato</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label for="patrimonio" class="form-label text-center">Patrimônio</label>
-                        <input type="number" name="patrimonio" id="patrimonio" value="<%= item.patrimonio %>"
-                            class="form-control" placeholder="Patrimônio" />
+                        <input type="number" name="patrimonio" id="patrimonio" value="<%= item.patrimonio %> "
+                            class="form-control" placeholder="Patrimônio" disabled>
                     </div>
                     <div class="col-md-6">
                         <label for="descricao" class="form-label">Descrição</label>
