@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./private/js/db');
+const database = require('./src/database/database');
 
 //Search Route
 router.get('/', async (req, res) => {
-    const listagem = await db.showInventario();
+    const listagem = await database.showInventory();
     const input = JSON.parse(JSON.stringify(req.body));
     const id = input['input-filter'];
 
-    res.render('../views/inventario', {
+    res.render('../src/views/inventario', {
         listagem: listagem,
         id: id,
         item: {}
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const connection = await db.connect();
+        const connection = await database.connect();
         const [rows, _] = await connection.execute(
             'SELECT * FROM Inventario WHERE patrimonio=?;',
             [req.params.id]
@@ -43,7 +43,6 @@ router.get('/:id', async (req, res) => {
 
 // Add Route
 router.post('/add', async (req, res) => {
-
     const {
         'input-valor-compra': valorCompra,
         'input-patrimonio': patrimonio,
@@ -56,7 +55,7 @@ router.post('/add', async (req, res) => {
     } = req.body
 
     const currencyRegex = /[\D]/g;
-    const valorCompraNumerico = Number(valorCompra.replace(currencyRegex, '').replace(',', '.'));
+    const valorCompraNumerico = Number(valorCompra?.replace(currencyRegex, '').replace(',', '.'));
     const data = {
         patrimonio,
         unidade,
@@ -67,12 +66,14 @@ router.post('/add', async (req, res) => {
         usuario,
         nserie,
     };
+
     try {
-        const connection = await db.connect();
+        const connection = await database.connect();
         await connection.query('INSERT INTO Inventario SET ?', [data]);
         res.redirect('/');
     } catch (error) {
         console.log(error);
+        console.log(valorCompra);
         res.status(500).send({
             mensagem: 'Ocorreu um erro ao inserir os dados',
         });
@@ -83,11 +84,11 @@ router.post('/add', async (req, res) => {
 router.get('/delete/:id', async (req, res) => {
     const userId = req.params.id;
     try {
-        const connection = await db.connect();
+        const connection = await database.connect();
         const result = await connection.execute(
             'DELETE FROM Inventario WHERE patrimonio = ?', [userId]
         );
-        await connection.end();
+        await connection.release();
         if (result.affectedRows === 0) {
             res.status(404).send('Registro não encontrado');
         } else {
@@ -102,19 +103,17 @@ router.get('/delete/:id', async (req, res) => {
 
 //Edit Route
 router.post('/items/:id', async (req, res) => {
-    console.log(req.body);
-
     try {
         const itemId = req.params.id;
         const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;
         const currencyRegex = /[\D]/g;
         const valorCompraNumerico = Number(valorestim.replace(currencyRegex, '').replace(',', '.'));
-        const connection = await db.connect();
+        const connection = await database.connect();
         await connection.query(
             'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=? WHERE patrimonio=?;',
             [unidade, descricao, modelo, localizacao, valorCompraNumerico, usuario, nserie, itemId]
         );
-        connection.end();
+        connection.release();
         res.redirect('/');
     } catch (error) {
         console.log(error);
@@ -126,13 +125,16 @@ router.post('/items/:id', async (req, res) => {
 
 router.get('/api/items/:id', async (req, res) => {
     try {
-        const itemId = req.params.id;
-        const connection = await db.connect();
+        const itemId = parseInt(req.params.id);
+        if (!Number.isInteger(itemId)) {
+            throw new Error('O ID do item deve ser um número inteiro. ');
+        }
+        const connection = await database.connect();
         const result = await connection.query(
             'SELECT * FROM Inventario WHERE patrimonio = ?',
             [itemId]
         );
-        connection.end();
+        connection.release();
         res.json(result[0]);
     } catch (error) {
         console.log(error);

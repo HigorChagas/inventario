@@ -60,8 +60,8 @@
             </div>
             <div class="col-md-3">
                 <label for="input-valor-compra" class="form-label">Valor da compra</label>
-                <input type="text" name="valorestim" id="input-valor-compra" class="form-control" placeholder="R$"
-                    required>
+                <input type="text" name="input-valor-compra" id="input-valor-compra" class="form-control"
+                    placeholder="R$" required>
                 <div class="invalid-feedback">
                     Por favor, digite um valor
                 </div>
@@ -91,7 +91,7 @@
                 Por favor, digite um valor
             </div>
         </div>
-        
+
         <table class="table table-hover table-striped table-light" id="table">
             <thead>
                 <th scope="col">Patrimônio</th>
@@ -104,8 +104,8 @@
                 <th scope="col">Nº de série</th>
                 <th scope="col">Ações</th>
             </thead>
-            <tbody class="table-group-divider" aria-label="Page navigation example">
-                <% listagem.slice(0, 13).forEach(element=> { %>
+            <tbody class="table-group-divider" aria-label="Page navigation example" data-page="0">
+                <% listagem.forEach(element=> { %>
                     <tr>
                         <th>
                             <%= element.patrimonio %>

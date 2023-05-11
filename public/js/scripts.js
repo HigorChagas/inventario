@@ -72,7 +72,7 @@ function tableFilter() {
 
 tableFilter();
 
-const inputValor = document.querySelectorAll('input[name=valorestim]');
+const inputValor = document.querySelectorAll('input[name=valorestim], input[name=input-valor-compra]');
 
 const formatarValor = (valor) => {
     valor = valor.replace(/\D/g, '');
@@ -90,10 +90,3 @@ inputValor.forEach(value => {
 })
 
 formatarValor();
-
-
-
-
-
-
-
