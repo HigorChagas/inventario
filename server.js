@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const app = express();
 const routes = require('./routes');
 const port = 8080;
@@ -8,6 +9,7 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use('/', routes);
 app.use(express.static(__dirname + '/public'));
+app.use(helmet());
 
 app.set('view engine', 'ejs');
 

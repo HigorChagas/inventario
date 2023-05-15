@@ -1,18 +1,49 @@
 const express = require('express');
+const session = require('express-session');
 const router = express.Router();
 const database = require('./src/database/database');
 
+// express-session middleware config
+router.use(session({
+    secret: 'teste',
+    resave: false,
+    saveUninitialized: true
+}));
+
+//Home route
+router.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    if (username === 'admin' && password === '123') {
+        req.session.user = {
+            username: username,
+        };
+        res.redirect('/');
+    } else {
+        res.status(401).send('Credenciais inválidas');
+    }
+});
+
+router.get('/login', (req, res) => {
+    res.render('../src/views/login');
+})
+
 //Search Route
 router.get('/', async (req, res) => {
-    const listagem = await database.showInventory();
-    const input = JSON.parse(JSON.stringify(req.body));
-    const id = input['input-filter'];
+    try {
+        const listagem = await database.showInventory();
+        const input = JSON.parse(JSON.stringify(req.body));
+        const id = input && input['input-filter'];
 
-    res.render('../src/views/inventario', {
-        listagem: listagem,
-        id: id,
-        item: {}
-    });
+        res.render('../src/views/inventario', {
+            listagem: listagem,
+            id: id,
+            item: {}
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Ocorreu um erro no servidor');
+    }
 });
 
 router.get('/:id', async (req, res) => {
@@ -24,9 +55,8 @@ router.get('/:id', async (req, res) => {
         );
         if (rows.length === 0) {
             res.status(404).json({ mensagem: 'Item não encontrado' });
-
         } else {
-            res.render('../views/inventario', {
+            res.render('../src/views/inventario', {
                 listagem: rows,
                 itemId: req.params.id,
                 item: {}
@@ -88,7 +118,7 @@ router.get('/delete/:id', async (req, res) => {
         const result = await connection.execute(
             'DELETE FROM Inventario WHERE patrimonio = ?', [userId]
         );
-        await connection.release();
+        connection.release();
         if (result.affectedRows === 0) {
             res.status(404).send('Registro não encontrado');
         } else {
