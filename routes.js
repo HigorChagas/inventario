@@ -4,6 +4,10 @@ const router = express.Router();
 const database = require('./src/database/database');
 const app = express();
 
+app.use(express.static(__dirname + '/public'));
+
+app.set('view engine', 'ejs');
+
 // express-session middleware config
 router.use(session({
     secret: 'teste',
@@ -137,13 +141,19 @@ router.get('/delete/:id', async (req, res) => {
 router.post('/items/:id', async (req, res) => {
     try {
         const itemId = req.params.id;
-        const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra } = req.body;
+        const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;
+
+        //Formatação do input data para ser aceito no SQL
+        const inputDate = req.body['input-data'];
+        const dateObj = new Date(inputDate);
+        const formattedDate = dateObj.toISOString().split('T')[0];
+
         const currencyRegex = /[\D]/g;
         const valorCompraNumerico = Number(valorestim.replace(currencyRegex, '').replace(',', '.'));
         const connection = await database.connect();
         await connection.query(
-            'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=? data_compra=? WHERE patrimonio=?;',
-            [unidade, descricao, modelo, localizacao, valorCompraNumerico, usuario, nserie, data_compra, itemId]
+            'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=?, data_compra=? WHERE patrimonio=?;',
+            [unidade, descricao, modelo, localizacao, valorCompraNumerico, usuario, nserie, formattedDate, itemId]
         );
         connection.release();
         res.redirect('/');

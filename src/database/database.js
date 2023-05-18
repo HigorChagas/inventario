@@ -32,7 +32,7 @@ async function showInventory() {
                 const options = { year: 'numeric', month: '2-digit', day: '2-digit' }
                 row.formattedDataCompra = new Date(dateValue).toLocaleDateString('pt-BR', options);
             } else {
-                row.formattedDataCompra = 'Data de compra não disponível';
+                row.formattedDataCompra = 'Sem data';
             }
         })
         return rows;
@@ -72,21 +72,25 @@ async function createITAsset(inventory) {
 }
 
 async function editAsset(id, inventory) {
-    const conn = await connect();
-    const sql =
-        'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=?, data_compra WHERE patrimonio=?;    ';
-    const values = [
-        inventory.unidade,
-        inventory.descricao,
-        inventory.modelo,
-        inventory.localizacao,
-        inventory.valorestim,
-        inventory.usuario,
-        inventory.nserie,
-        inventory.data_compra,
-        id,
-    ];
-    return await conn.query(sql, values);
+    try {
+        const conn = await connect();
+        const sql =
+            'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=?, data_compra=? WHERE patrimonio=?;    ';
+        const values = [
+            inventory.unidade,
+            inventory.descricao,
+            inventory.modelo,
+            inventory.localizacao,
+            inventory.valorestim,
+            inventory.usuario,
+            inventory.nserie,
+            id,
+        ];
+        return await conn.query(sql, values);
+    } catch (error) {
+        console.error('Erro ao editar itens no banco de dados', error)
+        throw error;
+    }
 }
 
 async function deleteAsset(id) {
