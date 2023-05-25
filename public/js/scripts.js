@@ -79,7 +79,7 @@ const tableFilter = () => {
                 event.preventDefault();
             });
         } else {
-            const url = `${data}`;
+            const url = `/inventario/${data}`;
             searchBtn.setAttribute('href', url);
             searchBtn.click();
         }

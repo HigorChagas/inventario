@@ -22,7 +22,7 @@ router.get('/login', (req, res) => {
 });
 
 //Search Route
-router.get('/', checkAuthentication, async (req, res) => {
+router.get('/inventario', checkAuthentication, async (req, res) => {
     try {
         const listagem = await database.showInventory();
         const input = JSON.parse(JSON.stringify(req.body));
@@ -39,7 +39,7 @@ router.get('/', checkAuthentication, async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/inventario/:id', async (req, res) => {
     try {
         const connection = await database.connect();
         const [rows, _] = await connection.execute(
@@ -47,7 +47,7 @@ router.get('/:id', async (req, res) => {
             [req.params.id]
         );
         if (rows.length === 0) {
-            res.status(404).json({ mensagem: 'Item não encontrado' });
+            res.status(401).render({ mensagem: 'Item não encontrado' });
         } else {
             res.render('../src/views/inventario', {
                 listagem: rows,
@@ -206,32 +206,34 @@ router.post('/register', async (req, res, next) => {
     }
 });
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', async (req, res) => {
     try {
         const connection = await database.connect();
         if (!connection) {
             return res.status(500).send({ message: 'Ocorreu um erro ao processar a solicitação.' });
         }
 
-        const results = await connection.query('SELECT * FROM Users WHERE username=?', [req.body.username]);
-        if (results.length < 1) {
-            return res.status(401).send({ message: 'Falha na autenticação' })
+        const results = await connection.query('SELECT * FROM Users WHERE username = ?', [req.body.username]);
+        const user = results[0]?.[0];
+
+        if (!user) {
+            return res.render('../src/views/login', {
+                message: 'Login ou senha incorreta'
+            });
         }
 
-        const passwordMatch = results[0] && results[0][0] && await bcrypt.compare(req.body.password, results[0][0].password);
+        const passwordMatch = user && await bcrypt.compare(req.body.password, user.password);
         if (passwordMatch) {
             req.session.userAuthenticated = true;
             return res.render('../src/views/welcome', {
                 message: 'Bem vindo ao sistema!'
             });
         } else {
-            console.error('Falha na autenticação, login ou senha incorreta');
-            return res.render('../src/views/login', {
-                message: 'Falha na autenticação, login ou senha incorreta'
-            });
+
         }
     } catch (error) {
         console.error(error);
+        return res.status(500).send({ message: 'Ocorreu um erro ao processar a solicitação.' });
     }
 });
 
