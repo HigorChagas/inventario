@@ -15,6 +15,19 @@
     }
 })(document);
 
+const exportToExcel = () => {
+    const table = document.getElementById('table');
+    const workbook = XLSX.utils.table_to_book(table);
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const fileName = 'inventario.xlsx';
+
+    saveAs(blob, fileName);
+}
+
+document.getElementById('export-btn').addEventListener('click', exportToExcel);
+
+
 const editItems = () => {
     const editItemBtns = document.querySelectorAll('#edit-item-btn');
 
@@ -62,7 +75,9 @@ const tableFilter = () => {
     searchBtn.addEventListener('click', () => {
         const data = input.value;
         if (!data) {
-            console.log('Teste');
+            searchBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+            });
         } else {
             const url = `${data}`;
             searchBtn.setAttribute('href', url);
@@ -73,20 +88,21 @@ const tableFilter = () => {
 
 tableFilter();
 
-const inputValue = document.querySelectorAll('input[name=valorestim], input[name=input-valor-compra]');
+document.addEventListener('DOMContentLoaded', () => {
 
-const formatValue = (value) => {
-    value = value.replace(/\D/g, '');
-    value = (value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const inputValue = document.querySelectorAll('input[name=valorestim], input[name=input-valor-compra]');
 
-    return value;
-};
+    const formatValue = (value) => {
+        value = value.replace(/\D/g, '');
+        value = (value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-inputValue.forEach(value => {
-    value.addEventListener('input', (event) => {
-        const formattedValue = formatValue(event.target.value);
-        event.target.value = formattedValue;
+        return value;
+    };
+
+    inputValue.forEach(value => {
+        value.addEventListener('input', (event) => {
+            const formattedValue = formatValue(event.target.value);
+            event.target.value = formattedValue;
+        });
     });
-})
-
-formatValue();
+});
