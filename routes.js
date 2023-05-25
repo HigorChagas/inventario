@@ -6,7 +6,6 @@ const app = express();
 const bcrypt = require('bcrypt');
 const checkAuthentication = require('./src/middlewares/authentication');
 
-app.use(express.static(__dirname + '/public'));
 app.use(checkAuthentication);
 
 app.set('view engine', 'ejs');
