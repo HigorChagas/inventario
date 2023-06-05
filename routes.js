@@ -5,6 +5,7 @@ const database = require('./src/database/database');
 const app = express();
 const bcrypt = require('bcrypt');
 const checkAuthentication = require('./src/middlewares/authentication');
+const Swal = require('sweetalert2');
 
 app.use(checkAuthentication);
 
@@ -14,11 +15,13 @@ app.set('view engine', 'ejs');
 router.use(session({
     secret: 'teste',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
 }));
 
 router.get('/login', (req, res) => {
-    res.render('../src/views/login');
+    res.render('../src/views/login', {
+        message: null
+    });
 });
 
 //Search Route
@@ -27,11 +30,14 @@ router.get('/inventario', checkAuthentication, async (req, res) => {
         const listagem = await database.showInventory();
         const input = JSON.parse(JSON.stringify(req.body));
         const id = input && input['input-filter'];
+        const successMessage = req.session.successMessage;
+        delete req.session.successMessage;
 
         res.render('../src/views/inventario', {
             listagem: listagem,
             id: id,
-            item: {}
+            item: {},
+            successMessage
         });
     } catch (error) {
         console.error(error);
@@ -39,19 +45,23 @@ router.get('/inventario', checkAuthentication, async (req, res) => {
     }
 });
 
-router.get('/inventario/:id', async (req, res) => {
+router.get('/inventario/:id', checkAuthentication, async (req, res) => {
     try {
         const connection = await database.connect();
+        const id = req.params.id;
         const [rows, _] = await connection.execute(
             'SELECT * FROM Inventario WHERE patrimonio=?;',
             [req.params.id]
         );
+        req.session.successMessage = null;
         if (rows.length === 0) {
-            res.status(401).render({ mensagem: 'Item não encontrado' });
+            res.status(401).render('../src/views/inventario', {
+                message: 'Item não encontrado'
+            })
         } else {
             res.render('../src/views/inventario', {
                 listagem: rows,
-                itemId: req.params.id,
+                itemId: id,
                 item: {}
             });
         }
@@ -65,7 +75,7 @@ router.get('/inventario/:id', async (req, res) => {
 });
 
 // Add Route
-router.post('/add', async (req, res) => {
+router.post('/add', checkAuthentication, async (req, res) => {
     const {
         'input-valor-compra': valorCompra,
         'input-patrimonio': patrimonio,
@@ -95,7 +105,8 @@ router.post('/add', async (req, res) => {
     try {
         const connection = await database.connect();
         await connection.query('INSERT INTO Inventario SET ?', [data]);
-        res.redirect('/');
+        req.session.successMessage = 'Item adicionado com sucesso!';
+        res.redirect('/inventario');
     } catch (error) {
         console.log(error);
         res.status(500).send({
@@ -105,7 +116,7 @@ router.post('/add', async (req, res) => {
 });
 
 //Delete Route
-router.get('/delete/:id', async (req, res) => {
+router.get('/delete/:id', checkAuthentication, async (req, res) => {
     const userId = req.params.id;
     try {
         const connection = await database.connect();
@@ -113,10 +124,11 @@ router.get('/delete/:id', async (req, res) => {
             'DELETE FROM Inventario WHERE patrimonio = ?', [userId]
         );
         connection.release();
+        req.session.successMessage = 'Item deletado com sucesso!';
         if (result.affectedRows === 0) {
             res.status(404).send('Registro não encontrado');
         } else {
-            res.redirect('/');
+            res.redirect('/inventario');
         }
 
     } catch (error) {
@@ -126,7 +138,7 @@ router.get('/delete/:id', async (req, res) => {
 });
 
 //Edit Route
-router.post('/items/:id', async (req, res) => {
+router.post('/items/:id', checkAuthentication, async (req, res) => {
     try {
         const itemId = req.params.id;
         const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;
@@ -149,7 +161,8 @@ router.post('/items/:id', async (req, res) => {
             [unidade, descricao, modelo, localizacao, valorCompraNumerico, usuario, nserie, formattedDate, itemId]
         );
         connection.release();
-        res.redirect('/');
+        req.session.successMessage = 'Item editado com sucesso';
+        res.redirect('/inventario');
     } catch (error) {
         console.log(error);
         res.status(500).send({
@@ -158,7 +171,7 @@ router.post('/items/:id', async (req, res) => {
     }
 });
 
-router.get('/api/items/:id', async (req, res) => {
+router.get('/api/items/:id', checkAuthentication, async (req, res) => {
     try {
         const itemId = parseInt(req.params.id);
         if (!Number.isInteger(itemId)) {
@@ -206,7 +219,7 @@ router.post('/register', async (req, res, next) => {
     }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/auth', async (req, res) => {
     try {
         const connection = await database.connect();
         if (!connection) {
@@ -229,12 +242,25 @@ router.post('/login', async (req, res) => {
                 message: 'Bem vindo ao sistema!'
             });
         } else {
-
+            return res.render('../src/views/login', {
+                message: 'Login ou senha incorreto'
+            });
         }
     } catch (error) {
         console.error(error);
         return res.status(500).send({ message: 'Ocorreu um erro ao processar a solicitação.' });
     }
+});
+
+router.get('/logout', checkAuthentication, (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Erro ao fazer logout');
+        }
+
+        res.redirect('/login');
+    });
 });
 
 module.exports = router;

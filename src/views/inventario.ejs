@@ -2,92 +2,97 @@
     <section class="container">
         <h1 class="display-2 text-center">Inventário</h1>
         <p class="lead text-center">Cadastro de equipamento</p>
-        <form class="row g-3 needs-validation" method="post" action="/add" novalidate>
-            <div class="row g-4 align-items-center mb-3">
-                <div class="col-12 text-center row mt-4 justify-content-center">
-                    <label for="input-unidade" id="inputUnidade" class="col-form-label">Unidade</label>
-                    <div class="col-6">
-                        <select required name="input-unidade" id="input-unidade" class="form-select">
-                            <option selected>Selecione a unidade...</option>
-                            <option value="Piancó">Piancó</option>
-                            <option value="Orfanato">Orfanato</option>
-                        </select>
-                    </div>
-                </div>
+        <% if (successMessage) { %>
+            <div class="alert alert-success text-center" role="alert">
+                <%= successMessage %>
             </div>
-            <div class="col-md-6">
-                <label for="input-patrimonio" class="form-label">Patrimônio</label>
-                <% if ('input-patrimonio' !=='Piancó' || 'input-patrimonio' !=='Orfanato' ) { %>
-                    <div class="invalid-feedback">
-                        Por favor, selecione uma unidade
+            <% } %>
+                <form class="row g-3 needs-validation" method="post" action="/add" novalidate>
+                    <div class="row g-4 align-items-center mb-3">
+                        <div class="col-12 text-center row mt-4 justify-content-center">
+                            <label for="input-unidade" id="inputUnidade" class="col-form-label">Unidade</label>
+                            <div class="col-6">
+                                <select required name="input-unidade" id="input-unidade" class="form-select">
+                                    <option selected>Selecione a unidade...</option>
+                                    <option value="Piancó">Piancó</option>
+                                    <option value="Orfanato">Orfanato</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <% } %>
-                        <input type="number" name="input-patrimonio" id="input-patrimonio" class="form-control"
-                            placeholder="Patrimônio" required>
+                    <div class="col-md-6">
+                        <label for="input-patrimonio" class="form-label">Patrimônio</label>
+                        <% if ('input-patrimonio' !=='Piancó' || 'input-patrimonio' !=='Orfanato' ) { %>
+                            <div class="invalid-feedback">
+                                Por favor, selecione uma unidade
+                            </div>
+                            <% } %>
+                                <input type="number" name="input-patrimonio" id="input-patrimonio" class="form-control"
+                                    placeholder="Patrimônio" required>
 
-            </div>
-            <div class="col-md-6">
-                <label for="input-descricao" class="form-label">Descrição</label>
-                <input type="text" name="input-descricao" id="input-descricao" class="form-control"
-                    placeholder="Descrição" required>
-                <div class="invalid-feedback">
-                    Por favor, digite um valor
-                </div>
-            </div>
-            <div class="col-md-12">
-                <label for="input-usuario" class="form-label">Usuário</label>
-                <input type="text" name="input-usuario" id="input-usuario" class="form-control"
-                    placeholder="Nome do usuário" required>
-                <div class="invalid-feedback">
-                    Por favor, digite um valor
-                </div>
-            </div>
-            <div class="col-md-12">
-                <label for="input-modelo" class="form-label">Modelo</label>
-                <input type="text" name="input-modelo" id="input-modelo" class="form-control"
-                    placeholder="Modelo do equipamento" required>
-                <div class="invalid-feedback">
-                    Por favor, digite um valor
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label for="input-departamento" class="form-label">Departamento</label>
-                <input type="text" name="input-departamento" id="input-departamento" class="form-control"
-                    placeholder="Departamento" required>
-                <div class="invalid-feedback">
-                    Por favor, digite um valor
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label for="input-valor-compra" class="form-label">Valor da compra</label>
-                <input type="text" name="input-valor-compra" id="input-valor-compra" class="form-control"
-                    placeholder="R$" required>
-                <div class="invalid-feedback">
-                    Por favor, digite um valor
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label for="input-data" class="form-label">Data da compra</label>
-                <input type="date" name="input-data" id="input-data" class="form-control"
-                    placeholder="Digite a data de compra" value="" required>
-                <div class="invalid-feedback">
-                    Por favor, digite um valor
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label for="input-serie" class="form-label">Nº de série</label>
-                <input type="text" placeholder="Nº série" name="input-serie" id="input-serie" class="form-control"
-                    required>
-                <div class="invalid-feedback">
-                    Por favor, digite um valor
-                </div>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">
-                    Adicionar
-                </button>
-            </div>
-        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="input-descricao" class="form-label">Descrição</label>
+                        <input type="text" name="input-descricao" id="input-descricao" class="form-control"
+                            placeholder="Descrição" required>
+                        <div class="invalid-feedback">
+                            Por favor, digite um valor
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="input-usuario" class="form-label">Usuário</label>
+                        <input type="text" name="input-usuario" id="input-usuario" class="form-control"
+                            placeholder="Nome do usuário" required>
+                        <div class="invalid-feedback">
+                            Por favor, digite um valor
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="input-modelo" class="form-label">Modelo</label>
+                        <input type="text" name="input-modelo" id="input-modelo" class="form-control"
+                            placeholder="Modelo do equipamento" required>
+                        <div class="invalid-feedback">
+                            Por favor, digite um valor
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="input-departamento" class="form-label">Departamento</label>
+                        <input type="text" name="input-departamento" id="input-departamento" class="form-control"
+                            placeholder="Departamento" required>
+                        <div class="invalid-feedback">
+                            Por favor, digite um valor
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="input-valor-compra" class="form-label">Valor da compra</label>
+                        <input type="text" name="input-valor-compra" id="input-valor-compra" class="form-control"
+                            placeholder="R$" required>
+                        <div class="invalid-feedback">
+                            Por favor, digite um valor
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="input-data" class="form-label">Data da compra</label>
+                        <input type="date" name="input-data" id="input-data" class="form-control"
+                            placeholder="Digite a data de compra" value="" required>
+                        <div class="invalid-feedback">
+                            Por favor, digite um valor
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="input-serie" class="form-label">Nº de série</label>
+                        <input type="text" placeholder="Nº série" name="input-serie" id="input-serie"
+                            class="form-control" required>
+                        <div class="invalid-feedback">
+                            Por favor, digite um valor
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            Adicionar
+                        </button>
+                    </div>
+                </form>
     </section>
     <section class="container-fluid mt-5">
         <div class="container mb-5 col-md-4 d-flex">

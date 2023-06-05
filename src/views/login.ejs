@@ -7,11 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/custom.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="imgs/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="imgs/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="imgs/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
   <title>Login</title>
 </head>
 
 <body>
-  <section class="vh-100" style="background-color: #508bfc;">
+  <section class="vh-100" style="background-color: #00C459;">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -20,36 +24,41 @@
 
               <h3 class="mb-5">Login</h3>
               <% if (message) { %>
-                <div class="container d-flex justify-content-center alert alert-danger">
-                  <h5>
-                    <%= message %>
-                  </h5>
-                  <% } %>
-                </div>
-                <form action="/login" method="post">
-                  <div class="form-outline mb-4">
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="input-username" name="username">
-                      <label for="input-username">Username</label>
+                <% if (message===null ) { %>
+                  <div class="container d-none">
+                  </div>
+                  <% } else { %>
+                    <div class="container d-flex justify-content-center align-items-center alert alert-danger">
+                      <h5>
+                        <%= message %>
+                      </h5>
                     </div>
-                  </div>
+                    <% } %>
+                      <% } %>
+                        <form action="/auth" method="post">
+                          <div class="form-outline mb-4">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="input-username" name="username">
+                              <label for="input-username">Username</label>
+                            </div>
+                          </div>
 
-                  <div class="form-outline mb-4">
-                    <div class="form-floating">
-                      <input type="password" class="form-control" id="input-password" name="password">
-                      <label for="floatingPassword">Password</label>
-                    </div>
-                  </div>
+                          <div class="form-outline mb-4">
+                            <div class="form-floating">
+                              <input type="password" class="form-control" id="input-password" name="password">
+                              <label for="floatingPassword">Password</label>
+                            </div>
+                          </div>
 
-                  <!-- Checkbox -->
-                  <div class="form-check d-flex justify-content-start mb-4">
-                    <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-                    <label class="form-check-label" for="form1Example3"> Remember password </label>
-                  </div>
+                          <!-- Checkbox -->
+                          <div class="form-check d-flex justify-content-start mb-4">
+                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
+                            <label class="form-check-label" for="form1Example3"> Remember password </label>
+                          </div>
 
-                  <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-                </form>
-                <hr class="my-4">
+                          <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+                        </form>
+                        <hr class="my-4">
             </div>
           </div>
         </div>

@@ -90,7 +90,7 @@ tableFilter();
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const inputValue = document.querySelectorAll('input[name=valorestim], input[name=input-valor-compra]');
+    const inputValue = document.querySelectorAll('input[name=input-valor-compra]');
 
     const formatValue = (value) => {
         value = value.replace(/\D/g, '');

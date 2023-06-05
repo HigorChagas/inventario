@@ -13,6 +13,7 @@ app.use(helmet());
 
 app.set('view engine', 'ejs');
 
+
 app.use((req, res) => {
     res.status(404).render('../src/views/404')
 });
