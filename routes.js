@@ -19,8 +19,10 @@ router.use(session({
 }));
 
 router.get('/login', (req, res) => {
+    const errorMessage = req.session.errorMessage;
+    delete req.session.errorMessage;
     res.render('../src/views/login', {
-        message: null
+        errorMessage
     });
 });
 
@@ -31,13 +33,16 @@ router.get('/inventario', checkAuthentication, async (req, res) => {
         const input = JSON.parse(JSON.stringify(req.body));
         const id = input && input['input-filter'];
         const successMessage = req.session.successMessage;
-        delete req.session.successMessage;
+        const errorMessage = req.session.errorMessage;
+        // delete req.session.successMessage;
+        // delete req.session.errorMessage;
 
         res.render('../src/views/inventario', {
             listagem: listagem,
             id: id,
             item: {},
-            successMessage
+            successMessage,
+            errorMessage
         });
     } catch (error) {
         console.error(error);
@@ -195,7 +200,7 @@ router.get('/api/items/:id', checkAuthentication, async (req, res) => {
 router.post('/register', async (req, res, next) => {
     const connection = await database.connect();
     if (connection) {
-        const results = await connection.query('SELECT * FROM Users WHERE email=?', [req.body.email]);
+        const results = await connection.query('SELECT * FROM users WHERE email=?', [req.body.email]);
         try {
             if (results.length > 0 && results[0][0]?.email === req.body?.email) {
                 res.status(409).send({
@@ -204,7 +209,7 @@ router.post('/register', async (req, res, next) => {
             } else {
                 bcrypt.hash(req.body.password, 10, (errBcrypt, hash) => {
                     if (errBcrypt) { return res.status(500).send({ error: errBcrypt }); }
-                    connection.query('INSERT INTO Users (name, username, password, email, created_at, updated_at) VALUES(?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);',
+                    connection.query('INSERT INTO users (name, username, password, email, created_at, updated_at) VALUES(?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);',
                         [req.body.name, req.body.username, hash, req.body.email],
                         (error, results) => {
                             connection.release();
@@ -226,13 +231,12 @@ router.post('/auth', async (req, res) => {
             return res.status(500).send({ message: 'Ocorreu um erro ao processar a solicitação.' });
         }
 
-        const results = await connection.query('SELECT * FROM Users WHERE username = ?', [req.body.username]);
+        const results = await connection.query('SELECT * FROM users WHERE username = ?', [req.body.username]);
         const user = results[0]?.[0];
+        const errorMessage = 'Login ou senha incorreta';
 
         if (!user) {
-            return res.render('../src/views/login', {
-                message: 'Login ou senha incorreta'
-            });
+            return res.render('../src/views/login', { errorMessage })
         }
 
         const passwordMatch = user && await bcrypt.compare(req.body.password, user.password);
@@ -242,9 +246,7 @@ router.post('/auth', async (req, res) => {
                 message: 'Bem vindo ao sistema!'
             });
         } else {
-            return res.render('../src/views/login', {
-                message: 'Login ou senha incorreto'
-            });
+            return res.render('../src/views/login', { errorMessage })
         }
     } catch (error) {
         console.error(error);
