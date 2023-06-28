@@ -1,30 +1,8 @@
-require('dotenv').config();
-
-async function connect() {
-    try {
-        const mysql = require('mysql2/promise');
-        const connectionPool = await mysql.createPool({
-            host: process.env.DB_URL,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-            connectionLimit: 10, // Configura o limite de conexões do pool
-            namedPlaceholders: true, // Habilita o uso de placeholders nomeados em queries
-            timezone: '-03:00' // Define o fuso horário padrão das datas para UTC
-        });
-        const connection = await connectionPool.getConnection();
-        return connection
-
-    } catch (error) {
-        console.error('Erro ao conectar ao banco de dados: ', error);
-        throw error;
-    }
-}
+const { connect } = require('../database/database');
 
 async function showInventory() {
-    let conn
+    const conn = await connect();
     try {
-        conn = await connect();
         const [rows] = await conn.execute('SELECT * FROM Inventario');
         rows.forEach(row => {
             if (row.data_compra !== null) {
@@ -45,9 +23,8 @@ async function showInventory() {
 }
 
 async function createITAsset(inventory) {
-    let conn
     try {
-        conn = await connect();
+        const conn = await connect();
         const sql =
             'INSERT INTO Inventario (unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra) VALUES(?, ?, ?, ?, ?, ?, ?, ?);';
         const values = [
@@ -68,6 +45,8 @@ async function createITAsset(inventory) {
     } catch (error) {
         console.error('Erro ao registrar item no banco de dados', error)
         throw error;
+    } finally {
+        if (conn) conn.release();
     }
 }
 
@@ -90,6 +69,8 @@ async function editAsset(id, inventory) {
     } catch (error) {
         console.error('Erro ao editar itens no banco de dados', error)
         throw error;
+    } finally {
+        if (conn) conn.release();
     }
 }
 
@@ -100,10 +81,21 @@ async function deleteAsset(id) {
     return await conn.query(sql, values);
 }
 
+async function searchItem(itemId) {
+    try {
+        const conn = await connect();
+        const [rows] = await conn.execute('SELECT * FROM Inventario WHERE patrimonio = ?', [itemId]);
+        return rows;
+    } catch (error) {
+        console.error('Erro ao buscar item', error);
+        throw error;
+    }
+}
+
 module.exports = {
-    connect,
-    showInventory: showInventory,
-    createITAsset: createITAsset,
-    editAsset: editAsset,
-    deleteAsset: deleteAsset,
+    showInventory,
+    createITAsset,
+    editAsset,
+    deleteAsset,
+    searchItem,
 };

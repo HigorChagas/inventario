@@ -15,6 +15,23 @@
     }
 })(document);
 
+
+const inputValue = document.querySelectorAll('input[name=input-valor-compra], input[name=valorestim]');
+
+const formatValue = (value) => {
+    value = value.replace(/\D/g, '');
+    value = (value / 100).toFixed(2)
+
+    return value;
+};
+inputValue.forEach(value => {
+    value.addEventListener('input', (event) => {
+        const formattedValue = formatValue(event.target.value);
+        event.target.value = formattedValue;
+        console.log(event.target.value);
+    });
+});
+
 const exportToExcel = () => {
     const table = document.getElementById('table');
     const workbook = XLSX.utils.table_to_book(table);
@@ -88,21 +105,3 @@ const tableFilter = () => {
 
 tableFilter();
 
-document.addEventListener('DOMContentLoaded', () => {
-
-    const inputValue = document.querySelectorAll('input[name=input-valor-compra]');
-
-    const formatValue = (value) => {
-        value = value.replace(/\D/g, '');
-        value = (value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-        return value;
-    };
-
-    inputValue.forEach(value => {
-        value.addEventListener('input', (event) => {
-            const formattedValue = formatValue(event.target.value);
-            event.target.value = formattedValue;
-        });
-    });
-});

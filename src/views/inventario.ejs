@@ -1,13 +1,16 @@
 <%- include('includes/header.ejs') %>
+
     <section class="container">
         <h1 class="display-2 text-center">Inventário</h1>
         <p class="lead text-center">Cadastro de equipamento</p>
+
         <% if (successMessage) { %>
             <div class="alert alert-success text-center" role="alert">
                 <%= successMessage %>
             </div>
             <% } %>
-                <form class="row g-3 needs-validation" method="post" action="/add" novalidate>
+
+                <form class="row g-3 needs-validation" method="post" action="/addItem" novalidate>
                     <div class="row g-4 align-items-center mb-3">
                         <div class="col-12 text-center row mt-4 justify-content-center">
                             <label for="input-unidade" id="inputUnidade" class="col-form-label">Unidade</label>
@@ -22,6 +25,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="input-patrimonio" class="form-label">Patrimônio</label>
+
                         <% if ('input-patrimonio' !=='Piancó' || 'input-patrimonio' !=='Orfanato' ) { %>
                             <div class="invalid-feedback">
                                 Por favor, selecione uma unidade
@@ -29,7 +33,6 @@
                             <% } %>
                                 <input type="number" name="input-patrimonio" id="input-patrimonio" class="form-control"
                                     placeholder="Patrimônio" required>
-
                     </div>
                     <div class="col-md-6">
                         <label for="input-descricao" class="form-label">Descrição</label>
@@ -98,14 +101,14 @@
         <div class="container mb-5 col-md-4 d-flex">
             <input type="text" name="input-filter" id="input-filter" placeholder="Digite o Nº do patrimônio" required
                 class="form-control">
-            <a href="" target="_blank" class="btn btn-info ms-3" id="filter-btn">Pesquisar</a>
+            <a href="" class="btn btn-info ms-3" id="filter-btn">Pesquisar</a>
             <div class="invalid-feedback">
                 Por favor, digite um valor
             </div>
         </div>
         <div class="table-responsive">
             <table class="table table-hover table-striped table-light" id="table">
-                <thead>
+                <thead class="text-center">
                     <th scope="col">Patrimônio</th>
                     <th scope="col">Unidade</th>
                     <th scope="col">Descrição</th>
@@ -118,15 +121,15 @@
                     <th scope="col">Ações</th>
                 </thead>
                 <tbody class="table-group-divider" id="tbody" aria-label="Items table" data-page="0">
-                    <% listagem.forEach(element=> { %>
-                        <tr>
+                    <% listing.forEach(element=> { %>
+                        <tr class="item text-center">
                             <th class="col col-lg-1">
                                 <%= element.patrimonio %>
                             </th>
                             <th class="col col-lg-1">
                                 <%= element.unidade %>
                             </th>
-                            <th class="col col-lg-1">
+                            <th class="col col-lg-1 ">
                                 <%= element.descricao %>
                             </th>
                             <th class="col col-lg-1">
@@ -147,8 +150,9 @@
                             <th class="col col-lg-1">
                                 <%= element.nserie %>
                             </th>
-                            <th class="col col-lg-2"><button type="button" class="btn btn-sm btn-warning"
-                                    id="edit-item-btn" data-bs-toggle="modal" data-bs-target="#editModal"
+                            <th class="col col-lg-2">
+                                <button type="button" class="btn btn-sm btn-warning mb-2" id="edit-item-btn"
+                                    data-bs-toggle="modal" data-bs-target="#editModal"
                                     data-item-id="<%= element.patrimonio %>">
                                     Editar
                                 </button>
@@ -159,7 +163,9 @@
                         <% }); %>
                 </tbody>
             </table>
-            <button class="btn btn-success" id="export-btn">Exportar para excel</button>
+            <button onclick="fetchNextPage()" class="btn btn-outline-primary mb-3">Próxima página</button>
         </div>
+        <button class="btn btn-success" id="export-btn">Exportar para excel</button>
+        
         <%- include('./includes/modal') %>
-            <%- include('includes/footer.ejs') %>
+        <%- include('includes/footer.ejs') %>
