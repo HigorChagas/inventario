@@ -12,6 +12,15 @@ async function showInventory() {
             } else {
                 row.formattedDataCompra = 'Sem data';
             }
+
+            if(row.valorestim !== null) {
+                const formattedValue = new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                }).format(row.valorestim);
+
+                return formattedValue;
+            }
         })
         return rows;
     } catch (error) {
@@ -23,10 +32,11 @@ async function showInventory() {
 }
 
 async function createITAsset(inventory) {
+    let connection
     try {
-        const conn = await connect();
+        connection = await connect();
         const sql =
-            'INSERT INTO Inventario (unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra) VALUES(?, ?, ?, ?, ?, ?, ?, ?);';
+            'INSERT INTO Inventario (patrimonio, unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);';
         const values = [
             inventory.patrimonio,
             inventory.unidade,
@@ -38,21 +48,23 @@ async function createITAsset(inventory) {
             inventory.nserie,
             inventory.data_compra
         ];
-        if (!inventory.patrimonio || !inventory.unidade || !inventory.descricao || !inventory.modelo || !inventory.localizacao || !inventory.valorestim || !inventory.usuario || !inventory.nserie || inventory.data_compra) {
+        if (!inventory.patrimonio || !inventory.unidade || !inventory.descricao || !inventory.modelo || !inventory.localizacao || !inventory.valorestim || !inventory.usuario || !inventory.nserie || !inventory.data_compra) {
+            console.log(values);
             throw new Error('Dados inválidos');
         }
-        return await conn.query(sql, values);
+        return await connection.query(sql, values);
     } catch (error) {
         console.error('Erro ao registrar item no banco de dados', error)
         throw error;
     } finally {
-        if (conn) conn.release();
+        if (connection) connection.release();
     }
 }
 
 async function editAsset(id, inventory) {
+    let connection 
     try {
-        const conn = await connect();
+        connection = await connect();
         const sql =
             'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=?, data_compra=? WHERE patrimonio=?;    ';
         const values = [
@@ -63,22 +75,33 @@ async function editAsset(id, inventory) {
             inventory.valorestim,
             inventory.usuario,
             inventory.nserie,
+            inventory.data_compra,
             id,
         ];
-        return await conn.query(sql, values);
+        return await connection.query(sql, values);
     } catch (error) {
         console.error('Erro ao editar itens no banco de dados', error)
         throw error;
     } finally {
-        if (conn) conn.release();
+        if (connection) connection.release();
     }
 }
 
 async function deleteAsset(id) {
-    const conn = await connect();
-    const sql = 'DELETE FROM Inventario WHERE patrimonio=?;';
-    const values = [id];
-    return await conn.query(sql, values);
+    let connection; 
+    try {
+        connection = await connect();
+        const sql = 'DELETE FROM Inventario WHERE patrimonio=?;';
+        const values = [id];
+        return await connection.query(sql, values);
+    } catch (error) {
+        console.error('Erro ao excluir item do banco de dados', error);
+        throw error;
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
 }
 
 async function searchItem(itemId) {

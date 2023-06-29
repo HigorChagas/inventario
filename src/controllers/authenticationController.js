@@ -35,7 +35,7 @@ const authenticateUser = async (req, res) => {
             return res.status(500).send({ message: 'Ocorreu um erro ao processar a solicitação.' });
         }
 
-        const results = await connection.query('SELECT * FROM users WHERE username = ?', [req.body.username]);
+        const results = await connection.query('SELECT * FROM users WHERE BINARY username = ?', [req.body.username]);
         const user = results[0]?.[0];
 
         if (!user) {

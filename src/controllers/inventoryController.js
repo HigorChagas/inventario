@@ -84,9 +84,17 @@ const addItem = async (req, res) => {
         'input-data': data_compra,
     } = req.body
 
+    const inputDate = req.body['input-data'];
+    let formattedDate = null
+
+    if (inputDate) {
+        const dateObj = new Date(inputDate);
+        formattedDate = dateObj.toISOString().split('T')[0];
+    }
+
     const currencyRegex = /[\D]/g;
     const valorCompraNumerico = Number(valorCompra?.replace(currencyRegex, '').replace(',', '.'));
-    const data = {
+    const inventoryData = {
         patrimonio,
         unidade,
         descricao,
@@ -95,16 +103,15 @@ const addItem = async (req, res) => {
         valorestim: valorCompraNumerico,
         usuario,
         nserie,
-        data_compra,
+        data_compra: formattedDate,
     };
 
     try {
-        const connection = await database.connect();
-        await connection.query('INSERT INTO Inventario SET ?', [data]);
+        await inventoryModel.createITAsset(inventoryData);
         req.session.successMessage = 'Item adicionado com sucesso!';
         res.redirect('/inventario');
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send({
             mensagem: 'Ocorreu um erro ao inserir os dados',
         });
@@ -112,19 +119,12 @@ const addItem = async (req, res) => {
 }
 
 const deleteItem = async (req, res) => {
-    const userId = req.params.id;
     try {
-        const connection = await database.connect();
-        const result = await connection.execute(
-            'DELETE FROM Inventario WHERE patrimonio = ?', [userId]
-        );
-        connection.release();
+        const userId = req.params.id;
+        await inventoryModel.deleteAsset(userId);
+
         req.session.successMessage = 'Item deletado com sucesso!';
-        if (result.affectedRows === 0) {
-            res.status(404).send('Registro não encontrado');
-        } else {
-            res.redirect('/inventario');
-        }
+        res.redirect('/inventario');
 
     } catch (error) {
         console.log(error);
@@ -137,7 +137,6 @@ const editItem = async (req, res) => {
         const itemId = req.params.id;
         const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;
 
-        //Formatação do input data para ser aceito no SQL
         const inputDate = req.body['input-data'];
         let formattedDate = null
 
@@ -147,18 +146,23 @@ const editItem = async (req, res) => {
         }
 
         const currencyRegex = /[\D]/g;
-        const valorCompraNumerico = Number(valorestim.replace(currencyRegex, '').replace(',', '.'));
-        const connection = await database.connect();
+        const formattedCurrencyField = Number(valorestim.replace(currencyRegex, ''));
 
-        await connection.query(
-            'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=?, data_compra=? WHERE patrimonio=?;',
-            [unidade, descricao, modelo, localizacao, valorCompraNumerico, usuario, nserie, formattedDate, itemId]
-        );
-        connection.release();
+        await inventoryModel.editAsset(itemId, {
+            unidade,
+            descricao,
+            modelo,
+            localizacao,
+            valorestim: formattedCurrencyField,
+            usuario,
+            nserie,
+            data_compra: formattedDate
+        });
+
         req.session.successMessage = 'Item editado com sucesso';
         res.redirect('/inventario');
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send({
             mensagem: 'Ocorreu um erro ao atualizar os dados',
         });
