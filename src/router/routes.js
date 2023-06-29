@@ -15,7 +15,7 @@ router.use(session({
     saveUninitialized: false
 }));
 
-router.get('/login', (req, res) => {
+router.get('/', (req, res) => {
     const errorMessage = req.session.errorMessage;
     delete req.session.errorMessage;
     res.render('../src/views/login', {

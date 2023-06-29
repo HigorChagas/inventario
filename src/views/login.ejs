@@ -14,8 +14,8 @@
   <title>Login</title>
 </head>
 
-<body>
-  <section class="vh-100" style="background-color: #00C459;">
+<body style="background-color: #00C459;">
+  <section>
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -23,9 +23,9 @@
             <div class="card-body p-5 text-center">
 
               <div class="d-flex justify-content-center">
-                <img src="imgs/logo-2.png" alt="Logo da São Judas" width="50" height="50">
+                <img src="imgs/logo.png" class="mb-1" alt="Logo da São Judas">
               </div>
-              <h3 class="mb-3">Login</h3>
+              <h3 class="mb-3 mt-3">Login</h3>
 
               <% if (errorMessage) { %>
                 <div class="alert alert-danger" role="alert">
@@ -36,24 +36,21 @@
                     <div class="form-outline mb-4">
                       <div class="form-floating">
                         <input type="text" class="form-control" id="input-username" name="username" required>
-                        <label for="input-username">Usuário</label>
-                        <div class="invalid-feedback">
-                          Please choose a username.
-                        </div>
+                        <label for="username">Usuário</label>
                       </div>
                     </div>
 
                     <div class="form-outline mb-4">
                       <div class="form-floating">
                         <input type="password" class="form-control" id="input-password" name="password" required>
-                        <label for="floatingPassword">Senha</label>
-                        <div class="invalid-feedback">
-                          Please choose a username.
-                        </div>
+                        <label for="password">Senha</label>
                       </div>
                     </div>
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+                    <button class="btn btn-primary btn-lg btn-block mb-3" type="submit">Login</button>
                   </form>
+                  <p><a href="#"
+                      class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-3">Esqueceu
+                      a senha?</a></p>
                   <hr class="my-4">
             </div>
           </div>

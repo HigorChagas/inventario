@@ -17,6 +17,9 @@ const renderInventory = async (req, res) => {
             listing: listing,
             id: id,
             item: {},
+            company: {
+                location: 'Piancó',
+            },
             successMessage,
             errorMessage
         });

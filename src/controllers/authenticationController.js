@@ -68,7 +68,7 @@ const userLogout = (req, res) => {
             return res.status(500).send('Erro ao fazer logout');
         }
 
-        res.redirect('/login');
+        res.redirect('/');
     });
 }
 
