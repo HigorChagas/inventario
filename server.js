@@ -21,7 +21,7 @@ const sessionStore = new MySQLStore({
     database: process.env.DB_NAME
 })
 
-router.use(session({
+app.use(session({
     secret: sessionKey,
     resave: false,
     saveUninitialized: true,
