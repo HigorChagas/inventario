@@ -28,7 +28,7 @@ app.use(
     session({
     cookie: {
         secure: true,
-        maxAge: 60000
+        maxAge: 1800000
         },
     store: sessionStore,
     secret: sessionKey,
