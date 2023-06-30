@@ -47,10 +47,11 @@ app.set('view engine', 'ejs');
 app.use((req, res) => {
     res.status(404).render('../src/views/404')
 });
-// //Localhost
-// app.listen(port, () => {
-//     console.log(`Server running in ${PORT}`);
-// });
+
+//Localhost
+app.listen(PORT, () => {
+    console.log(`Server running in ${PORT}`);
+});
 
 
 
