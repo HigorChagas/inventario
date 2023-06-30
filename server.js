@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const routes = require('./src/router/routes');
 const bodyparser = require('body-parser');
-const MySQLStore = require('express-mysql-session')(session);
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const crypto = require('crypto');
 const PORT = process.env.PORT || 3000;
 
