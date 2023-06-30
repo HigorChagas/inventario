@@ -21,12 +21,20 @@ const sessionStore = new MySQLStore({
     database: process.env.DB_NAME
 })
 
-app.use(session({
+app.set('trust proxy', 1);
+
+app.use(
+    session({
+    cookie: {
+        secure: true,
+        maxAge: 60000
+        },
+    store: sessionStore,
     secret: sessionKey,
     resave: false,
-    saveUninitialized: true,
-    store: sessionStore
-}));
+    saveUninitialized: true,   
+    },
+));
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
