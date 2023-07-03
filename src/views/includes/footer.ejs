@@ -3,6 +3,7 @@
     <p class="text-center">Assessoria Contábil e Fiscal São Judas &copy; 2023 Todos os direitos reservados </p>
 </footer>
 
+<script src="js/jquery.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/switch.js"></script>
@@ -28,6 +29,31 @@
                 }, false)
             })
     })()
+
+    $(document).ready(function () {
+        $('#input-filter').on('keyup', function () {
+            const value = $(this).val().toLowerCase(); // Obter o valor da pesquisa em letras minúsculas
+            $('#tbody tr.item').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1); // Mostrar ou ocultar os itens da tabela com base na pesquisa
+            });
+        });
+    });
+
+    $('#table').datatable({
+        pageSize: 15,
+        sort: '*'
+    });
+
+
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 

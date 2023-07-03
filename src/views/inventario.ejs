@@ -99,12 +99,7 @@
     </section>
     <section class="container-fluid mt-5">
         <div class="container mb-5 col-md-4 d-flex">
-            <input type="text" name="input-filter" id="input-filter" placeholder="Digite o Nº do patrimônio" required
-                class="form-control">
-            <a href="" class="btn btn-info ms-3" id="filter-btn">Pesquisar</a>
-            <div class="invalid-feedback">
-                Por favor, digite um valor
-            </div>
+            <input type="text" name="input-filter" id="input-filter" placeholder="Pesquisar item" required class="form-control">
         </div>
         <div class="table-responsive">
             <table class="table table-hover table-striped table-light" id="table">
@@ -163,7 +158,6 @@
                         <% }); %>
                 </tbody>
             </table>
-            <button onclick="fetchNextPage()" class="btn btn-outline-primary mb-3">Próxima página</button>
         </div>
         <button class="btn btn-success" id="export-btn">Exportar para excel</button>
         

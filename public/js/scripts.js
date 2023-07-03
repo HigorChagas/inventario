@@ -85,23 +85,3 @@ const formSubmit = () => {
 }
 
 formSubmit();
-
-const tableFilter = () => {
-    const searchBtn = document.getElementById('filter-btn');
-    const input = document.getElementById('input-filter');
-    searchBtn.addEventListener('click', () => {
-        const data = input.value;
-        if (!data) {
-            searchBtn.addEventListener('click', (event) => {
-                event.preventDefault();
-            });
-        } else {
-            const url = `/inventario/${data}`;
-            searchBtn.setAttribute('href', url);
-            searchBtn.click();
-        }
-    });
-}
-
-tableFilter();
-

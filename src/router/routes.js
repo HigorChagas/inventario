@@ -1,5 +1,4 @@
 const express = require('express');
-const session = require('express-session');
 const router = express.Router();
 const app = express();
 
@@ -8,12 +7,6 @@ const inventoryController = require('../controllers/inventoryController');
 const authenticationController = require('../controllers/authenticationController');
 
 app.set('view engine', 'ejs');
-
-router.use(session({
-    secret: 'teste',
-    resave: false,
-    saveUninitialized: false
-}));
 
 router.get('/', (req, res) => {
     const errorMessage = req.session.errorMessage;
