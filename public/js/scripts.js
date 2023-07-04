@@ -16,21 +16,21 @@
 })(document);
 
 
-// const inputValue = document.querySelectorAll('input[name=input-valor-compra], input[name=valorestim]');
+const inputValue = document.querySelectorAll('input[name=input-valor-compra], input[name=valorestim]');
 
-// const formatValue = (value) => {
-//     value = value.replace(/\D/g, '');
-//     value = (value / 100)
+const formatValue = (value) => {
+    value = value.replace(/\D/g, '');
+    value = (value / 100)
 
-//     return value;
-// };
-// inputValue.forEach(value => {
-//     value.addEventListener('input', (event) => {
-//         const formattedValue = formatValue(event.target.value);
-//         event.target.value = formattedValue;
-//         console.log(event.target.value);
-//     });
-// });
+    return value;
+};
+inputValue.forEach(value => {
+    value.addEventListener('input', (event) => {
+        const formattedValue = formatValue(event.target.value);
+        event.target.value = formattedValue;
+        console.log(event.target.value);
+    });
+});
 
 const exportToExcel = () => {
     const table = document.getElementById('table');
@@ -85,3 +85,4 @@ const formSubmit = () => {
 }
 
 formSubmit();
+

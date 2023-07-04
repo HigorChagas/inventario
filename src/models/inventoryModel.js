@@ -36,7 +36,7 @@ async function createITAsset(inventory) {
     try {
         connection = await connect();
         const sql =
-            'INSERT INTO Inventario (patrimonio, unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);';
+            'CALL bdsj.createInventory(?,? ,? ,? ,? ,? ,? ,? ,?)';
         const values = [
             inventory.patrimonio,
             inventory.unidade,
@@ -52,7 +52,7 @@ async function createITAsset(inventory) {
             console.log(values);
             throw new Error('Dados inválidos');
         }
-        return await connection.query(sql, values);
+        return await connection.execute(sql, values);
     } catch (error) {
         console.error('Erro ao registrar item no banco de dados', error)
         throw error;
@@ -65,6 +65,7 @@ async function editAsset(id, inventory) {
     let connection 
     try {
         connection = await connect();
+
         const sql =
             'UPDATE Inventario SET unidade=?, descricao=?, modelo=?, localizacao=?, valorestim=?, usuario=?, nserie=?, data_compra=? WHERE patrimonio=?;    ';
         const values = [
@@ -72,7 +73,7 @@ async function editAsset(id, inventory) {
             inventory.descricao,
             inventory.modelo,
             inventory.localizacao,
-            inventory.valorestim,
+            inventory.decimalBuyDate,
             inventory.usuario,
             inventory.nserie,
             inventory.data_compra,

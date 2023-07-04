@@ -7,6 +7,7 @@
 <script src="js/bootstrap.bundle.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/switch.js"></script>
+<script src="js/datatables.min.js"></script>
 <script>
 
     // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -30,22 +31,9 @@
             })
     })()
 
-    $(document).ready(function () {
-        $('#input-filter').on('keyup', function () {
-            const value = $(this).val().toLowerCase(); // Obter o valor da pesquisa em letras minúsculas
-            $('#tbody tr.item').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1); // Mostrar ou ocultar os itens da tabela com base na pesquisa
-            });
-        });
+    new DataTable('#table', {
+        info: false,
     });
-
-    $('#table').datatable({
-        pageSize: 15,
-        sort: '*'
-    });
-
-
-
 
 
 

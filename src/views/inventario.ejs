@@ -67,7 +67,7 @@
                     <div class="col-md-3">
                         <label for="input-valor-compra" class="form-label">Valor da compra</label>
                         <input type="text" name="input-valor-compra" id="input-valor-compra" class="form-control"
-                            placeholder="R$" required>
+                            placeholder="R$" onblur="formatMoney(this)" required>
                         <div class="invalid-feedback">
                             Por favor, digite um valor
                         </div>
@@ -93,10 +93,6 @@
                 </form>
     </section>
     <section class="container-fluid mt-5">
-        <div class="container mb-5 col-md-4 d-flex">
-            <input type="text" name="input-filter" id="input-filter" placeholder="Pesquisar item" required
-                class="form-control">
-        </div>
         <div class="table-responsive">
             <table class="table table-hover table-striped table-light" id="table">
                 <thead class="text-center">
@@ -158,4 +154,4 @@
         <button class="btn btn-success" id="export-btn">Exportar para excel</button>
 
         <%- include('./includes/modal') %>
-        <%- include('includes/footer.ejs') %>
+            <%- include('includes/footer.ejs') %>

@@ -21,7 +21,7 @@ const renderInventory = async (req, res) => {
                 location: 'Piancó',
             },
             successMessage,
-            errorMessage
+            errorMessage,
         });
     } catch (error) {
         console.error(error);
@@ -67,7 +67,7 @@ const searchItemAPI = async (req, res) => {
         connection.release();
         res.json(result[0]);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send({
             mensagem: 'Ocorreu um erro ao buscar as informações do item'
         });
@@ -130,25 +130,25 @@ const deleteItem = async (req, res) => {
         res.redirect('/inventario');
 
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send('Ocorreu um erro ao excluir os dados');
     }
 }
 
 const editItem = async (req, res) => {
+    let banana = req.body.valorestim;
+    console.log(banana);
     try {
         const itemId = req.params.id;
         const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;
-
         const inputDate = req.body['input-data'];
-        let formattedDate = null
+        const formattedDate = inputDate ? new Date(inputDate) : null;
 
         if (inputDate) {
-            const dateObj = new Date(inputDate);
             formattedDate = dateObj.toISOString().split('T')[0];
         }
 
-        const currencyRegex = /[\D]/g;
+        const currencyRegex = /[^0-9.]/g;
         const formattedCurrencyField = Number(valorestim.replace(currencyRegex, ''));
 
         await inventoryModel.editAsset(itemId, {
@@ -156,7 +156,7 @@ const editItem = async (req, res) => {
             descricao,
             modelo,
             localizacao,
-            valorestim: formattedCurrencyField,
+            valorestim,
             usuario,
             nserie,
             data_compra: formattedDate
