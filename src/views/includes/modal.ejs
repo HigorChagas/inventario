@@ -10,13 +10,9 @@
                     class="row g-3 needs-validation" id="editarItemModal" novalidate>
                     <div class="row g-4 align-items-center mb-3">
                         <div class="col-12 text-center row mt-4 justify-content-center">
-                            <label for="unidade" id="unidade" class="col-form-label">Unidade</label>
                             <div class="col-6">
-                                <select name="unidade" id="unidade" class="form-select">
-                                     <option value="">Selecione a localização...</option>
-                                     <option value="Piancó" <% if (company.location === 'Piancó') { %>selected<% } %>>Piancó</option>
-                                     <option value="Orfanato" <% if (company.location === 'Orfanato') { %>selected<% } %>>Orfanato</option>
-                                </select>
+                                <label for="unidade" class="form-label">Unidade</label>
+                                <input type="text" name="unidade" id="unidade" class="form-control" placeholder="Unidade" value="<%= item.unidade %>">
                             </div>
                         </div>
                     </div>
@@ -57,7 +53,7 @@
                     <div class="col-md-6">
                         <label for="input-data" class="form-label">Data da compra</label>
                         <input type="date" name="input-data" id="input-data" class="form-control"
-                            value="<%= item.formattedDataCompra %>">
+                            value="<%= console.log(item.nserie) %>">
                     </div>
                     <div class="col-12">
                     </div>

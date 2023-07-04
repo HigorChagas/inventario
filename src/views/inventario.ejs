@@ -26,13 +26,11 @@
                     <div class="col-md-6">
                         <label for="input-patrimonio" class="form-label">Patrimônio</label>
 
-                        <% if ('input-patrimonio' !=='Piancó' || 'input-patrimonio' !=='Orfanato' ) { %>
-                            <div class="invalid-feedback">
-                                Por favor, selecione uma unidade
-                            </div>
-                            <% } %>
-                                <input type="number" name="input-patrimonio" id="input-patrimonio" class="form-control"
-                                    placeholder="Patrimônio" required>
+                        <div class="invalid-feedback">
+                            Por favor, selecione uma unidade
+                        </div>
+                        <input type="number" name="input-patrimonio" id="input-patrimonio" class="form-control"
+                            placeholder="Patrimônio" required>
                     </div>
                     <div class="col-md-6">
                         <label for="input-descricao" class="form-label">Descrição</label>
@@ -77,10 +75,7 @@
                     <div class="col-md-3">
                         <label for="input-data" class="form-label">Data da compra</label>
                         <input type="date" name="input-data" id="input-data" class="form-control"
-                            placeholder="Digite a data de compra" value="" required>
-                        <div class="invalid-feedback">
-                            Por favor, digite um valor
-                        </div>
+                            placeholder="Digite a data de compra" value="">
                     </div>
                     <div class="col-md-3">
                         <label for="input-serie" class="form-label">Nº de série</label>
@@ -99,7 +94,8 @@
     </section>
     <section class="container-fluid mt-5">
         <div class="container mb-5 col-md-4 d-flex">
-            <input type="text" name="input-filter" id="input-filter" placeholder="Pesquisar item" required class="form-control">
+            <input type="text" name="input-filter" id="input-filter" placeholder="Pesquisar item" required
+                class="form-control">
         </div>
         <div class="table-responsive">
             <table class="table table-hover table-striped table-light" id="table">
@@ -116,7 +112,7 @@
                     <th scope="col">Ações</th>
                 </thead>
                 <tbody class="table-group-divider" id="tbody" aria-label="Items table" data-page="0">
-                    <% listing.forEach(element => { %>
+                    <% listing.forEach(element=> { %>
                         <tr class="item text-center">
                             <th class="col col-lg-1">
                                 <%= element.patrimonio %>
@@ -146,7 +142,7 @@
                                 <%= element.nserie %>
                             </th>
                             <th class="col col-lg-2">
-                                <button type="button" class="btn btn-sm btn-warning mb-2" id="edit-item-btn"
+                                <button type="button" class="btn btn-sm btn-warning" id="edit-item-btn"
                                     data-bs-toggle="modal" data-bs-target="#editModal"
                                     data-item-id="<%= element.patrimonio %>">
                                     Editar
@@ -160,6 +156,6 @@
             </table>
         </div>
         <button class="btn btn-success" id="export-btn">Exportar para excel</button>
-        
+
         <%- include('./includes/modal') %>
         <%- include('includes/footer.ejs') %>
