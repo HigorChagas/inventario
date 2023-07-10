@@ -22,11 +22,11 @@ router.post('/authentication', authenticationController.authenticateUser);
 router.get('/logout', checkAuthentication, authenticationController.userLogout);
 
 // Rotas de inventário
-router.get('/inventario', checkAuthentication, inventoryController.renderInventory);
-router.get('/inventario/:id', checkAuthentication, inventoryController.searchItem);
-router.get('/api/items/:id', checkAuthentication, inventoryController.searchItemAPI);
-router.get('/delete/:id', checkAuthentication, inventoryController.deleteItem);
-router.post('/addItem', checkAuthentication, inventoryController.addItem);
-router.post('/items/:id', checkAuthentication, inventoryController.editItem);
+router.get('/inventario',  inventoryController.renderInventory);
+router.get('/inventario/:id',  inventoryController.searchItem);
+router.get('/api/items/:id',  inventoryController.searchItemAPI);
+router.get('/delete/:id',  inventoryController.deleteItem);
+router.post('/addItem',  inventoryController.addItem);
+router.post('/items/:id',  inventoryController.editItem);
 
 module.exports = router;

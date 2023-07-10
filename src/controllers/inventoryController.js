@@ -7,14 +7,13 @@ const renderInventory = async (req, res) => {
         const input = JSON.parse(JSON.stringify(req.body));
         const id = input && input['input-filter'];
 
-        const successMessage = req.session.successMessage;
-        const errorMessage = req.session.errorMessage;
+        const { successMessage, errorMessage } = req.session;
 
         delete req.session.successMessage;
         delete req.session.errorMessage;
 
         res.render('../src/views/inventario', {
-            listing: listing,
+            listing,
             id: id,
             item: {},
             company: {
@@ -136,27 +135,36 @@ const deleteItem = async (req, res) => {
 }
 
 const editItem = async (req, res) => {
-    let banana = req.body.valorestim;
-    console.log(banana);
     try {
         const itemId = req.params.id;
         const { unidade, descricao, modelo, localizacao, valorestim, usuario, nserie } = req.body;
+
         const inputDate = req.body['input-data'];
-        const formattedDate = inputDate ? new Date(inputDate) : null;
+        let formattedDate = null
 
         if (inputDate) {
+            const dateObj = new Date(inputDate);
             formattedDate = dateObj.toISOString().split('T')[0];
         }
 
-        const currencyRegex = /[^0-9.]/g;
-        const formattedCurrencyField = Number(valorestim.replace(currencyRegex, ''));
+        const currencyRegex = /[^0-9,-]/g;
+        const valorCompraNumerico = parseFloat(valorestim?.replace(currencyRegex, '').replace(',', '.'));
 
+        let valorFormatado;
+        if (Math.abs(valorCompraNumerico) < 10000) {
+            valorFormatado = valorCompraNumerico.toFixed(2).padStart(7, '0');
+        } else {
+            valorFormatado = valorCompraNumerico.toFixed(2);
+            valorFormatado / 100;
+        }
+
+        console.log(valorCompraNumerico)
         await inventoryModel.editAsset(itemId, {
             unidade,
             descricao,
             modelo,
             localizacao,
-            valorestim,
+            valorestim: valorFormatado,
             usuario,
             nserie,
             data_compra: formattedDate

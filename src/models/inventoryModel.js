@@ -1,9 +1,9 @@
 const { connect } = require('../database/database');
 
 async function showInventory() {
-    const conn = await connect();
+    const connection = await connect();
     try {
-        const [rows] = await conn.execute('SELECT * FROM Inventario');
+        const [rows] = await connection.execute('SELECT * FROM Inventario');
         rows.forEach(row => {
             if (row.data_compra !== null) {
                 const dateValue = row.data_compra.toISOString();
@@ -27,29 +27,29 @@ async function showInventory() {
         console.error('Erro ao mostrar o inventário', error);
         throw error;
     } finally {
-        if (conn) conn.release();
+        if (connection) connection.release();
     }
 }
 
 async function createITAsset(inventory) {
     let connection
+    const { patrimonio, unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra } = inventory;
     try {
         connection = await connect();
         const sql =
-            'CALL bdsj.createInventory(?,? ,? ,? ,? ,? ,? ,? ,?)';
+        'INSERT INTO Inventario (patrimonio, unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);';
         const values = [
-            inventory.patrimonio,
-            inventory.unidade,
-            inventory.descricao,
-            inventory.modelo,
-            inventory.localizacao,
-            inventory.valorestim,
-            inventory.usuario,
-            inventory.nserie,
-            inventory.data_compra
+            patrimonio,
+            unidade,
+            descricao,
+            modelo,
+            localizacao,
+            valorestim,
+            usuario,
+            nserie,
+            data_compra
         ];
-        if (!inventory.patrimonio || !inventory.unidade || !inventory.descricao || !inventory.modelo || !inventory.localizacao || !inventory.valorestim || !inventory.usuario || !inventory.nserie || !inventory.data_compra) {
-            console.log(values);
+        if (!patrimonio || !unidade || !descricao || !modelo || !localizacao || !valorestim || !usuario || !nserie || !data_compra) {
             throw new Error('Dados inválidos');
         }
         return await connection.execute(sql, values);
@@ -73,7 +73,7 @@ async function editAsset(id, inventory) {
             inventory.descricao,
             inventory.modelo,
             inventory.localizacao,
-            inventory.decimalBuyDate,
+            inventory.valorestim,
             inventory.usuario,
             inventory.nserie,
             inventory.data_compra,
