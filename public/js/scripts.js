@@ -15,26 +15,17 @@
     }
 })(document);
 
-
-// const inputValue = document.querySelectorAll('input[name=input-valor-compra], input[name=valorestim]');
-
-// const formatValue = (value) => {
-//     value = value.replace(/\D/g, '');
-//     value = (value / 100)
-
-//     return value;
-// };
-// inputValue.forEach(value => {
-//     value.addEventListener('input', (event) => {
-//         const formattedValue = formatValue(event.target.value);
-//         event.target.value = formattedValue;
-//         console.log(event.target.value);
-//     });
-// });
-
 const exportToExcel = () => {
     const table = document.getElementById('table');
-    const workbook = XLSX.utils.table_to_book(table);
+    const workbook = XLSX.utils.book_new();
+
+    const allPages = table.querySelectorAll('tbody');
+
+    allPages.forEach((page) => {
+        const pageData = XLSX.utils.table_to_sheet(page);
+        XLSX.utils.book_append_sheet(workbook, pageData, 'Inventario');
+    });
+
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const fileName = 'inventario.xlsx';
@@ -86,11 +77,14 @@ const formSubmit = () => {
 
 formSubmit();
 
-
-new DataTable('#table', {
-    info: false,
-    scrollX: false
-});
+$(document).ready(function() {
+    $('#table').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'print', 
+        ],
+    } );
+} );
 
 $('#input-valor-compra, #valorestim').maskMoney({
     prefix: 'R$'

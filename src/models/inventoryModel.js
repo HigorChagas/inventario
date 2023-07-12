@@ -31,12 +31,29 @@ async function showInventory() {
     }
 }
 
+async function checkItemExists(patrimony) {
+    let connection
+    try {
+        connection = await connect();
+        const sql = 'SELECT * FROM Inventario WHERE patrimonio = ?;';
+        const values = [patrimony];
+        const [rows] = await connection.execute(sql, values);
+        return rows.length > 0;
+    } catch(error) {
+        console.error('Erro ao verificar a existência do item no banco de dados', error);
+        throw error;
+    } finally {
+        if(connection) connection.release();
+    }
+}
+
 async function createITAsset(inventory) {
     let connection
     const { patrimonio, unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra } = inventory;
     try {
         connection = await connect();
-        const sql =
+
+        const insertSql =
         'INSERT INTO Inventario (patrimonio, unidade, descricao, modelo, localizacao, valorestim, usuario, nserie, data_compra) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);';
         const values = [
             patrimonio,
@@ -49,10 +66,10 @@ async function createITAsset(inventory) {
             nserie,
             data_compra
         ];
-        if (!patrimonio || !unidade || !descricao || !modelo || !localizacao || !valorestim || !usuario || !nserie || !data_compra) {
+        if (!patrimonio || !unidade || !descricao || !modelo || !localizacao || !valorestim || !usuario || !nserie) {
             throw new Error('Dados inválidos');
         }
-        return await connection.execute(sql, values);
+        return await connection.execute(insertSql, values);
     } catch (error) {
         console.error('Erro ao registrar item no banco de dados', error)
         throw error;
@@ -122,4 +139,5 @@ module.exports = {
     editAsset,
     deleteAsset,
     searchItem,
+    checkItemExists
 };

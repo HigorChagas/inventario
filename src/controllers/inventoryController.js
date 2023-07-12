@@ -41,7 +41,6 @@ const searchItem = async (req, res) => {
                 listing: rows,
                 itemId: itemId,
                 item: {},
-                successMessage: 'Apenas um teste'
             });
         }
     } catch (error) {
@@ -94,6 +93,12 @@ const addItem = async (req, res) => {
         formattedDate = dateObj.toISOString().split('T')[0];
     }
 
+    if(!unidade || unidade == 'Selecione a unidade...') {
+        req.session.errorMessage = 'Por favor, selecione uma unidade válida.'
+        res.redirect('/inventario');
+        return;
+    }
+
     const currencyRegex = /[\D]/g;
     const valorCompraNumerico = Number(valorCompra?.replace(currencyRegex, '').replace(',', '.'));
     const inventoryData = {
@@ -109,6 +114,13 @@ const addItem = async (req, res) => {
     };
 
     try {
+        const itemExists = await inventoryModel.checkItemExists(patrimonio);
+        if(itemExists) {
+            req.session.errorMessage = 'O item já existe no inventário.';
+            res.redirect('/inventario');
+            return;
+        }
+
         await inventoryModel.createITAsset(inventoryData);
         req.session.successMessage = 'Item adicionado com sucesso!';
         res.redirect('/inventario');
@@ -141,6 +153,12 @@ const editItem = async (req, res) => {
 
         const inputDate = req.body['input-data'];
         let formattedDate = null
+
+        if(!unidade) {
+            req.session.errorMessage = 'Por favor, selecione uma unidade válida.'
+            res.redirect('/inventario');
+            return;
+        }
 
         if (inputDate) {
             const dateObj = new Date(inputDate);

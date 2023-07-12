@@ -8,7 +8,13 @@
             <div class="alert alert-success text-center" role="alert">
                 <%= successMessage %>
             </div>
-            <% } %>
+        <% } %>
+
+        <% if (errorMessage) { %>
+            <div class="alert alert-danger text-center" role="alert">
+                <%= errorMessage %>
+            </div>
+        <% } %>
 
                 <form class="row g-3 needs-validation" method="post" action="/addItem" novalidate>
                     <div class="row g-4 align-items-center mb-3">
@@ -151,7 +157,7 @@
                 </tbody>
             </table>
         </div>
-        <button class="btn btn-success" id="export-btn">Exportar para excel</button>
+        <button style="display: none;" id="export-btn"></button>
 
         <%- include('./includes/modal') %>
             <%- include('includes/footer.ejs') %>

@@ -11,16 +11,13 @@
     .container,
     .navbar,
     #input-filter,
-    #filter-btn {
-        display: none;
-    }
+    #filter-btn,
 
     th:last-child {
         display: none;
     }
 
     th {
-        padding: 0 50px;
         background-color: #fff;
     }
 
