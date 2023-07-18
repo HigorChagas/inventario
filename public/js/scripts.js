@@ -1,40 +1,17 @@
-(function (document) {
-    if (document.querySelectorAll('.deletar')) {
-        for (let i = 0; i < document.querySelectorAll('.deletar').length; i++) {
-            document.querySelectorAll('.deletar')[i].addEventListener(
-                'click',
-                function (event) {
-                    if (confirm('Deseja mesmo apagar esse Patrimonio?')) {
-                        return true;
-                    } else {
-                        event.preventDefault();
-                    }
-                }
-            );
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('deletar')) {
+        if (confirm('Deseja mesmo apagar esse Patrimônio?')) {
+            const itemId = event.target.dataset.itemId;
+            fetch(`/api/items/${itemId}`, {
+                method: 'DELETE'
+            }).then(response => {
+                console.log('Item deletado com sucesso!');
+            }).catch(error => {
+                console.error('Erro ao deletar o item:', error);
+            });
         }
     }
-})(document);
-
-const exportToExcel = () => {
-    const table = document.getElementById('table');
-    const workbook = XLSX.utils.book_new();
-
-    const allPages = table.querySelectorAll('tbody');
-
-    allPages.forEach((page) => {
-        const pageData = XLSX.utils.table_to_sheet(page);
-        XLSX.utils.book_append_sheet(workbook, pageData, 'Inventario');
-    });
-
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const fileName = 'inventario.xlsx';
-
-    saveAs(blob, fileName);
-}
-
-document.getElementById('export-btn').addEventListener('click', exportToExcel);
-
+});
 
 const editItems = () => {
     const editItemBtns = document.querySelectorAll('#edit-item-btn');
@@ -62,29 +39,33 @@ editItems();
 
 const formSubmit = () => {
     const form = document.querySelector('#modal-form');
-    const formBtn = form.querySelector('[type="submit"]');
     const patrimonio = form.querySelector('#patrimonio');
-    formBtn.addEventListener('click', () => {
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
         const itemId = parseInt(patrimonio.value, 10);
 
-        if (typeof itemId !== 'number') return;
-
-        const newRoute = `/items/${itemId}`;
-        form.setAttribute('action', newRoute);
-        form.submit();
+        if (Number.isInteger(itemId) && itemId > 0) {
+            const newRoute = `/items/${itemId}`;
+            form.setAttribute('action', newRoute);
+            form.submit();
+        } else {
+            alert('Por favor, insira um ID de item válido.');
+        }
     });
 }
 
 formSubmit();
 
-$(document).ready(function() {
-    $('#table').DataTable( {
+$(document).ready(function () {
+    $('#table').DataTable({
         dom: 'Bfrtip',
         buttons: [
-            'copy', 'csv', 'excel', 'print', 
+            'copy', 'excel', 'print',
         ],
-    } );
-} );
+    });
+});
 
 $('#input-valor-compra, #valorestim').maskMoney({
     prefix: 'R$'
