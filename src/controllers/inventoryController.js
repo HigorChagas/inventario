@@ -16,9 +16,6 @@ const renderInventory = async (req, res) => {
             listing,
             id: id,
             item: {},
-            company: {
-                location: 'Piancó',
-            },
             successMessage,
             errorMessage,
         });
@@ -82,7 +79,6 @@ const addItem = async (req, res) => {
         'input-departamento': localizacao,
         'input-usuario': usuario,
         'input-serie': nserie,
-        'input-data': data_compra,
     } = req.body
 
     const inputDate = req.body['input-data'];
@@ -176,7 +172,6 @@ const editItem = async (req, res) => {
             valorFormatado / 100;
         }
 
-        console.log(valorCompraNumerico)
         await inventoryModel.editAsset(itemId, {
             unidade,
             descricao,

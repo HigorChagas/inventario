@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/items/<%= company.patrimonio %>" method="POST" id="modal-form"
+                <form action="/items/<%= item.patrimonio %>" method="POST" id="modal-form"
                     class="row g-3 needs-validation" id="editarItemModal" novalidate>
                     <div class="row g-4 align-items-center mb-3">
                         <div class="col-12 text-center row mt-4 justify-content-center">
@@ -53,7 +53,7 @@
                     <div class="col-md-6">
                         <label for="input-data" class="form-label">Data da compra</label>
                         <input type="text" name="input-data" id="input-data" class="form-control"
-                            value="<%= item.formattedDataCompra %>">
+                            value="<%= item.formattedDate %>">
                     </div>
                     <div class="col-12">
                     </div>
