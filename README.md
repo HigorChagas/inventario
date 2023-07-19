@@ -21,10 +21,10 @@ Este é um projeto de inventário de TI que permite gerenciar e controlar os ati
   <code>npm install</code>
 4. Crie um arquivo `.env` na raiz do projeto e defina as variáveis de ambiente necessárias, como as configurações do banco de dados e porta do servidor:
 ```
-PORT=sua_porta_do_servidor
+PORT=_porta_do_seu_servidor
 DB_USER=seu_usuario_do_banco_de_dados
 DB_PASSWORD=sua_senha_do_banco_de_dados
-DB_URL=url_do_seu_servidor
+DB_URL=url_do_seu_banco_de_dados
 DB_NAME=nome_do_banco_de_dados
 ```
 5. Inicie o servidor:
