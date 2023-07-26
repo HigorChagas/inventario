@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const app = express();
 
@@ -9,11 +10,11 @@ const authenticationController = require('../controllers/authenticationControlle
 app.set('view engine', 'ejs');
 
 router.get('/', (req, res) => {
-    const errorMessage = req.session.errorMessage;
-    delete req.session.errorMessage;
-    res.render('../src/views/login', {
-        errorMessage
-    });
+  const { errorMessage } = req.session;
+  delete req.session.errorMessage;
+  res.render('../src/views/login', {
+    errorMessage,
+  });
 });
 
 // Rotas de autenticação
@@ -23,7 +24,7 @@ router.get('/logout', checkAuthentication, authenticationController.userLogout);
 
 // Rotas de inventário
 router.get('/inventario', checkAuthentication, inventoryController.renderInventory);
-router.get('/inventario/:id',checkAuthentication,  inventoryController.searchItem);
+router.get('/inventario/:id', checkAuthentication, inventoryController.searchItem);
 router.get('/api/items/:id', checkAuthentication, inventoryController.searchItemAPI);
 router.get('/delete/:id', checkAuthentication, inventoryController.deleteItem);
 router.post('/addItem', checkAuthentication, inventoryController.addItem);
