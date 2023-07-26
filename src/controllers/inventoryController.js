@@ -25,29 +25,6 @@ const renderInventory = async (req, res) => {
   }
 };
 
-const searchItem = async (req, res) => {
-  try {
-    const itemId = req.params.id;
-    const rows = await inventoryModel.searchItem(itemId);
-    if (rows.length === 0) {
-      res.status(401).render('../src/views/inventario', {
-        errorMessage: 'Item não encontrado',
-      });
-    } else {
-      res.render('../src/views/inventario', {
-        listing: rows,
-        itemId,
-        item: {},
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      errorMessage: 'Ocorreu um erro ao listar o item',
-    });
-  }
-};
-
 const searchItemAPI = async (req, res) => {
   try {
     const itemId = parseInt(req.params.id, 10);
@@ -195,7 +172,6 @@ const editItem = async (req, res) => {
 
 module.exports = {
   renderInventory,
-  searchItem,
   searchItemAPI,
   addItem,
   deleteItem,

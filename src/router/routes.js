@@ -23,7 +23,6 @@ router.get('/logout', checkAuthentication, authenticationController.userLogout);
 
 // Rotas de inventário
 router.get('/inventario', checkAuthentication, inventoryController.renderInventory);
-router.get('/inventario/:id', checkAuthentication, inventoryController.searchItem);
 router.get('/api/items/:id', checkAuthentication, inventoryController.searchItemAPI);
 router.get('/delete/:id', checkAuthentication, inventoryController.deleteItem);
 router.post('/addItem', checkAuthentication, inventoryController.addItem);

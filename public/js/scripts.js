@@ -1,6 +1,7 @@
 document.addEventListener('click', (event) => {
   if (event.target.classList.contains('delete')) {
-    if (confirm('Deseja mesmo apagar esse Patrimônio?', false)) {
+    const message = 'Deseja mesmo apagar esse Patrimônio?';
+    if (confirm(message)) {
       const { itemId } = event.target.dataset;
       fetch(`/api/items/${itemId}`, {
         method: 'DELETE',
