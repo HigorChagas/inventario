@@ -18,7 +18,6 @@ router.get('/', (req, res) => {
 });
 
 // Rotas de autenticação
-router.post('/register', authenticationController.registerUser);
 router.post('/authentication', authenticationController.authenticateUser);
 router.get('/logout', checkAuthentication, authenticationController.userLogout);
 
