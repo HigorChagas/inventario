@@ -2,27 +2,21 @@ const inventoryModel = require('../models/inventoryModel');
 const database = require('../database/database');
 
 const renderInventory = async (req, res) => {
-  try {
-    const listing = await inventoryModel.showInventory();
-    const input = JSON.parse(JSON.stringify(req.body));
-    const id = input && input['input-filter'];
+  const listing = await inventoryModel.showInventory();
+  const { input } = req.body;
+  const id = input && input['input-filter'];
 
-    const { successMessage, errorMessage } = req.session;
+  const { successMessage, errorMessage } = req.session;
+  req.session.successMessage = undefined;
+  req.session.errorMessage = undefined;
 
-    delete req.session.successMessage;
-    delete req.session.errorMessage;
-
-    res.render('../src/views/inventario', {
-      listing,
-      id,
-      item: {},
-      successMessage,
-      errorMessage,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Ocorreu um erro ao exibir os dados do servidor');
-  }
+  res.render('../src/views/inventario', {
+    listing,
+    id,
+    item: {},
+    successMessage,
+    errorMessage,
+  });
 };
 
 const searchItemAPI = async (req, res) => {
@@ -31,6 +25,7 @@ const searchItemAPI = async (req, res) => {
     if (!Number.isInteger(itemId)) {
       throw new Error('O ID do item deve ser um número inteiro. ');
     }
+
     const connection = await database.connect();
     const result = await connection.query(
       'SELECT * FROM Inventario WHERE patrimonio = ?',

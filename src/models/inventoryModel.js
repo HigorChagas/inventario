@@ -9,11 +9,14 @@ async function showInventory() {
     rows.forEach((row) => {
       const newRow = { ...row };
       if (row.data_compra !== null) {
-        const dateValue = row.data_compra.toISOString();
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        newRow.formattedBuyDate = new Date(dateValue).toLocaleDateString('pt-BR', options);
-      } else {
-        newRow.formattedBuyDate = 'Sem data';
+        try {
+          const dateValue = row.data_compra.toISOString();
+          const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+          newRow.formattedBuyDate = new Date(dateValue).toLocaleDateString('pt-BR', options);
+        } catch (error) {
+          console.error(`Erro ao formatar data: ${error.message}`);
+          newRow.formattedBuyDate = 'Data inválida';
+        }
       }
 
       if (row.valorestim !== null) {

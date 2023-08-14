@@ -138,7 +138,11 @@
                 R$ <%= element.valorestim %>
               </th>
               <th class="col col-lg-1">
-                <%= element.formattedDataCompra %>
+                <% if (element.data_compra !== null) { %>
+                  <%= new Date(element.data_compra).toLocaleDateString('pt-BR') %>
+                <% } else { %>
+                  Sem data
+                <% } %>
               </th>
               <th class="col col-lg-1">
                 <%= element.nserie %>

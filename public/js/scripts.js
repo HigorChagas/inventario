@@ -1,6 +1,6 @@
 document.addEventListener('click', async (event) => {
   if (event.target.classList.contains('delete')) {
-    event.stopPropagation(); // Impede a propagação do evento para o documento
+    event.stopPropagation();
     const { itemId } = event.target.dataset;
     const message = 'Deseja mesmo apagar esse Patrimônio?';
     const shouldDelete = window.confirm(message);
@@ -41,6 +41,7 @@ const editItems = () => {
         document.querySelector('#valorestim').value = dataValue?.valorestim ?? 'Nada';
         document.querySelector('#usuario').value = dataValue?.usuario ?? 'Nada';
         document.querySelector('#nserie').value = dataValue?.nserie ?? 'Nada';
+        document.querySelector('#input-data').value = dataValue?.data_compra ?? 'Nada';
       });
     });
   });
