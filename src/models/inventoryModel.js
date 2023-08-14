@@ -11,9 +11,9 @@ async function showInventory() {
       if (row.data_compra !== null) {
         const dateValue = row.data_compra.toISOString();
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        newRow.formattedDataCompra = new Date(dateValue).toLocaleDateString('pt-BR', options);
+        newRow.formattedBuyDate = new Date(dateValue).toLocaleDateString('pt-BR', options);
       } else {
-        newRow.formattedDataCompra = 'Sem data';
+        newRow.formattedBuyDate = 'Sem data';
       }
 
       if (row.valorestim !== null) {
@@ -70,6 +70,7 @@ async function createITAsset(inventory) {
       nserie,
       data_compra,
     ];
+    // eslint-disable-next-line max-len
     const fieldsToCheck = [patrimonio, unidade, descricao, modelo, localizacao, valorestim, usuario, nserie];
     if (fieldsToCheck.some((field) => !field)) {
       throw new Error('Dados inválidos');

@@ -142,19 +142,12 @@ const editItem = async (req, res) => {
     const currencyRegex = /[^0-9,-]/g;
     const valorCompraNumerico = parseFloat(valorestim?.replace(currencyRegex, '').replace(',', '.'));
 
-    let formatedValue;
-    if (Math.abs(valorCompraNumerico) < 10000) {
-      formatedValue = valorCompraNumerico.toFixed(2).padStart(7, '0');
-    } else {
-      formatedValue = valorCompraNumerico.toFixed(2);
-    }
-
     await inventoryModel.editAsset(itemId, {
       unidade,
       descricao,
       modelo,
       localizacao,
-      valorestim: formatedValue,
+      valorestim: valorCompraNumerico,
       usuario,
       nserie,
       data_compra: formattedDate,

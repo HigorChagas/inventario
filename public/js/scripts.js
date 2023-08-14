@@ -1,15 +1,24 @@
-document.addEventListener('click', (event) => {
+document.addEventListener('click', async (event) => {
   if (event.target.classList.contains('delete')) {
+    event.stopPropagation(); // Impede a propagação do evento para o documento
+    const { itemId } = event.target.dataset;
     const message = 'Deseja mesmo apagar esse Patrimônio?';
-    if (confirm(message)) {
-      const { itemId } = event.target.dataset;
-      fetch(`/api/items/${itemId}`, {
-        method: 'DELETE',
-      }).then(() => {
-        console.log('Item deletado com sucesso!');
-      }).catch((error) => {
+    const shouldDelete = window.confirm(message);
+
+    if (shouldDelete) {
+      try {
+        const response = await fetch(`/api/items/${itemId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          console.log('Item deletado com sucesso!');
+        } else {
+          console.error('Erro ao deletar o item:', response.status);
+        }
+      } catch (error) {
         console.error('Erro ao deletar o item:', error);
-      });
+      }
     }
   }
 });
@@ -52,6 +61,7 @@ const formSubmit = () => {
       form.setAttribute('action', newRoute);
       form.submit();
     } else {
+      // eslint-disable-next-line no-alert
       alert('Por favor, insira um ID de item válido.');
     }
   });
