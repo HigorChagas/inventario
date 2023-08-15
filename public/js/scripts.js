@@ -33,15 +33,16 @@ const editItems = () => {
       const data = await response.json();
 
       data.forEach((dataValue) => {
-        document.querySelector('#patrimonio').value = dataValue?.patrimonio ?? 'Nada';
-        document.querySelector('#unidade').value = dataValue?.unidade ?? 'Nada';
-        document.querySelector('#descricao').value = dataValue?.descricao ?? 'Nada';
-        document.querySelector('#modelo').value = dataValue?.modelo ?? 'Nada';
-        document.querySelector('#localizacao').value = dataValue?.localizacao ?? 'Nada';
-        document.querySelector('#valorestim').value = dataValue?.valorestim ?? 'Nada';
-        document.querySelector('#usuario').value = dataValue?.usuario ?? 'Nada';
-        document.querySelector('#nserie').value = dataValue?.nserie ?? 'Nada';
-        document.querySelector('#input-data').value = dataValue?.data_compra ?? 'Nada';
+        document.querySelector('#patrimonio').value = dataValue?.patrimony ?? 'Nada';
+        document.querySelector('#unidade').value = dataValue?.affiliate ?? 'Nada';
+        document.querySelector('#descricao').value = dataValue?.description ?? 'Nada';
+        document.querySelector('#modelo').value = dataValue?.model ?? 'Nada';
+        document.querySelector('#localizacao').value = dataValue?.department ?? 'Nada';
+        document.querySelector('#valorestim').value = dataValue?.assetValue ?? 'Nada';
+        document.querySelector('#usuario').value = dataValue?.user ?? 'Nada';
+        document.querySelector('#nserie').value = dataValue?.serialNumber ?? 'Nada';
+        document.querySelector('#modal-data').value = new Date(dataValue.purchaseDate).toLocaleDateString('pt-BR').split('/').reverse()
+          .join('-');
       });
     });
   });

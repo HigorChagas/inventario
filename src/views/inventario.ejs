@@ -114,45 +114,46 @@
           <th scope="col">Ações</th>
         </thead>
         <tbody class="table-group-divider" id="tbody" aria-label="Items table" data-page="0">
-          <% listing.forEach(element => { %>
+          <% listing.forEach(element=> { %>
             <tr class="item text-center">
               <th class="col col-lg-1">
-                <%= element.patrimonio %>
+                <%= element.patrimony %>
               </th>
               <th class="col col-lg-1">
-                <%= element.unidade %>
+                <%= element.affiliate %>
               </th>
               <th class="col col-lg-1 ">
-                <%= element.descricao %>
+                <%= element.description %>
               </th>
               <th class="col col-lg-1">
-                <%= element.usuario %>
+                <%= element.user %>
               </th>
               <th class="col col-lg-1">
-                <%= element.modelo %>
+                <%= element.model %>
               </th>
               <th class="col col-lg-1">
-                <%= element.localizacao %>
+                <%= element.department %>
               </th>
               <th class="col col-lg-2">
-                R$ <%= element.valorestim %>
+                R$ <%= (element.assetValue / 100).toFixed(2).replace('.', ',') %>
               </th>
               <th class="col col-lg-1">
-                <% if (element.data_compra !== null) { %>
-                  <%= new Date(element.data_compra).toLocaleDateString('pt-BR') %>
-                <% } else { %>
-                  Sem data
-                <% } %>
+                <% if (element.purchaseDate !==null) { %>
+                  <%= new Date(element.purchaseDate).toLocaleDateString('pt-BR') %>
+                    <% } else { %>
+                      Sem data
+                      <% } %>
               </th>
               <th class="col col-lg-1">
-                <%= element.nserie %>
+                <%= element.serialNumber %>
               </th>
               <th class="col col-lg-2">
                 <button type="button" class="btn btn-sm btn-warning" id="edit-item-btn" data-bs-toggle="modal"
-                  data-bs-target="#editModal" data-item-id="<%= element.patrimonio %>">
+                  data-bs-target="#editModal" data-item-id="<%= element.patrimony %>">
                   Editar
                 </button>
-                <a href="/delete/<%= element.patrimonio %>" data-itemid="patrimony-id" class="delete btn btn-sm btn-danger">Excluir</a>
+                <a href="/delete/<%= element.patrimony %>" data-itemid="patrimony-id"
+                  class="delete btn btn-sm btn-danger">Excluir</a>
               </th>
             </tr>
             <% }); %>
@@ -162,4 +163,4 @@
     <button style="display: none;" id="export-btn"></button>
 
     <%- include('./includes/modal') %>
-    <%- include('includes/footer.ejs') %>
+      <%- include('includes/footer.ejs') %>

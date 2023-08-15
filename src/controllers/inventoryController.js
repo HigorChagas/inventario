@@ -28,7 +28,7 @@ const searchItemAPI = async (req, res) => {
 
     const connection = await database.connect();
     const result = await connection.query(
-      'SELECT * FROM Inventario WHERE patrimonio = ?',
+      'SELECT * FROM Inventario WHERE patrimony = ?',
       [itemId],
     );
     connection.release();
@@ -43,46 +43,45 @@ const searchItemAPI = async (req, res) => {
 
 const addItem = async (req, res) => {
   const {
-    'input-valor-compra': valorCompra,
-    'input-patrimonio': patrimonio,
-    'input-unidade': unidade,
-    'input-descricao': descricao,
-    'input-modelo': modelo,
-    'input-departamento': localizacao,
-    'input-usuario': usuario,
-    'input-serie': nserie,
+    'input-valor-compra': assetValue,
+    'input-patrimonio': patrimony,
+    'input-unidade': affiliate,
+    'input-descricao': description,
+    'input-modelo': model,
+    'input-departamento': department,
+    'input-usuario': user,
+    'input-serie': serialNumber,
   } = req.body;
 
   const inputDate = req.body['input-data'];
   let formattedDate = null;
-
   if (inputDate) {
     const dateObj = new Date(inputDate);
     [formattedDate] = dateObj.toISOString().split('T');
   }
 
-  if (!unidade || unidade === 'Selecione a unidade...') {
+  if (!affiliate || affiliate === 'Selecione a unidade...') {
     req.session.errorMessage = 'Por favor, selecione uma unidade válida.';
     res.redirect('/inventario');
     return;
   }
 
   const currencyRegex = /[\D]/g;
-  const valorCompraNumerico = Number(valorCompra?.replace(currencyRegex, '').replace(',', '.'));
+  const assetValueFormated = Number(assetValue?.replace(currencyRegex, '').replace(',', '.'));
   const inventoryData = {
-    patrimonio,
-    unidade,
-    descricao,
-    modelo,
-    localizacao,
-    valorestim: valorCompraNumerico,
-    usuario,
-    nserie,
-    data_compra: formattedDate,
+    patrimony,
+    affiliate,
+    description,
+    model,
+    department,
+    assetValue: assetValueFormated,
+    user,
+    serialNumber,
+    formattedDate,
   };
 
   try {
-    const itemExists = await inventoryModel.checkItemExists(patrimonio);
+    const itemExists = await inventoryModel.checkItemExists(patrimony);
     if (itemExists) {
       req.session.errorMessage = 'O item já existe no inventário.';
       res.redirect('/inventario');
@@ -117,13 +116,19 @@ const editItem = async (req, res) => {
   try {
     const itemId = req.params.id;
     const {
-      unidade, descricao, modelo, localizacao, valorestim, usuario, nserie,
+      unidade: affiliate,
+      descricao: description,
+      modelo: model,
+      localizacao: department,
+      valorestim: assetValue,
+      usuario: user,
+      nserie: serialNumber,
     } = req.body;
 
-    const inputDate = req.body['input-data'];
-    let formattedDate = null;
+    const inputDate = req.body['modal-data'];
+    let formatedDate = null;
 
-    if (!unidade) {
+    if (!affiliate) {
       req.session.errorMessage = 'Por favor, selecione uma unidade válida.';
       res.redirect('/inventario');
       return;
@@ -131,21 +136,20 @@ const editItem = async (req, res) => {
 
     if (inputDate) {
       const dateObj = new Date(inputDate);
-      [formattedDate] = dateObj.toISOString().split('T');
+      [formatedDate] = dateObj.toISOString().split('T');
     }
-
-    const currencyRegex = /[^0-9,-]/g;
-    const valorCompraNumerico = parseFloat(valorestim?.replace(currencyRegex, '').replace(',', '.'));
+    const currencyRegex = /[\D]/g;
+    const assetValueFormated = Number(assetValue?.replace(currencyRegex, '').replace(',', '.'));
 
     await inventoryModel.editAsset(itemId, {
-      unidade,
-      descricao,
-      modelo,
-      localizacao,
-      valorestim: valorCompraNumerico,
-      usuario,
-      nserie,
-      data_compra: formattedDate,
+      affiliate,
+      description,
+      model,
+      department,
+      assetValueFormated,
+      user,
+      serialNumber,
+      formatedDate,
     });
 
     req.session.successMessage = 'Item editado com sucesso';

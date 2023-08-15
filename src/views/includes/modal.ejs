@@ -6,60 +6,57 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="/items/<%= item.patrimonio %>" method="POST" id="modal-form" class="row g-3 needs-validation"
+        <form action="/items/<%= item.patrimony %>" method="POST" id="modal-form" class="row g-3 needs-validation"
           id="editarItemModal" novalidate>
           <div class="row g-4 align-items-center mb-3">
             <div class="col-12 text-center row mt-4 justify-content-center">
               <div class="col-6">
                 <label for="unidade" class="form-label">Unidade</label>
-                <input type="text" name="unidade" id="unidade" class="form-control" placeholder="Unidade"
-                  value="<%= item.unidade %>">
+                <input type="text" name="unidade" id="unidade" class="form-control" placeholder="Unidade">
               </div>
             </div>
           </div>
           <div class="col-md-6">
             <label for="patrimonio" class="form-label text-center">Patrimônio</label>
-            <input type="number" name="patrimonio" id="patrimonio" value="<%= item.patrimonio %>" class="form-control"
+            <input type="number" name="patrimonio" id="patrimonio" class="form-control"
               placeholder="Patrimônio" disabled>
           </div>
           <div class="col-md-6">
             <label for="descricao" class="form-label">Descrição</label>
-            <input type="text" name="descricao" id="descricao" value="<%= item.descricao %>" class="form-control"
+            <input type="text" name="descricao" id="descricao" class="form-control"
               placeholder="Descrição">
           </div>
           <div class="col-md-12">
             <label for="usuario" class="form-label">Usuário</label>
-            <input type="text" name="usuario" id="usuario" class="form-control" placeholder="Nome do usuário"
-              value="<%= item.usuario %>">
+            <input type="text" name="usuario" id="usuario" class="form-control" placeholder="Nome do usuário">
           </div>
           <div class="col-md-12">
             <label for="modelo" class="form-label">Modelo</label>
-            <input type="text" name="modelo" id="modelo" class="form-control" placeholder="Modelo do equipamento"
-              value="<%= item.modelo %>">
+            <input type="text" name="modelo" id="modelo" class="form-control" placeholder="Modelo do equipamento">
           </div>
           <div class="col-md-6">
             <label for="localizacao" class="form-label">Departamento</label>
-            <input type="text" name="localizacao" id="localizacao" value="<%= item.departamento %>" class="form-control"
+            <input type="text" name="localizacao" id="localizacao" class="form-control"
               placeholder="Departamento">
           </div>
           <div class="col-md-6">
             <label for="valorestim" class="form-label">Valor da compra</label>
-            <input type="text" name="valorestim" id="valorestim" value="<%= item.valorestim %>" class="form-control"
+            <input type="text" name="valorestim" id="valorestim" class="form-control"
               placeholder="R$">
           </div>
           <div class="col-md-6">
             <label for="nserie" class="form-label">Nº de série</label>
-            <input type="text" name="nserie" id="nserie" class="form-control" value="<%= item.nserie %>">
+            <input type="text" name="nserie" id="nserie" class="form-control">
           </div>
           <div class="col-md-6">
-            <label for="input-data" class="form-label">Data da compra</label>
-            <input type="text" name="input-data" id="input-data" class="form-control" value="<%= item.valorestim %>">
+            <label for="modal-data" class="form-label">Data da compra</label>
+            <input type="date" name="modal-data" id="modal-data" class="form-control">
           </div>
           <div class="col-12">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            <button type="submit" class="btn btn-primary" data-item-id="<%= item.patrimonio %>">Editar</button>
+            <button type="submit" class="btn btn-primary" data-item-id="<%= item.patrimony %>">Editar</button>
           </div>
         </form>
       </div>
