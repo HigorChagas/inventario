@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const { connect } = require('../database/database');
 
 async function showInventory() {
@@ -83,7 +84,6 @@ async function createITAsset(inventory) {
       formattedDate,
     ];
 
-    console.log(assetValue);
     // eslint-disable-next-line max-len
     const fieldsToCheck = [patrimony, affiliate, description, model, department, assetValue, user, serialNumber];
     if (fieldsToCheck.some((field) => !field)) {
@@ -116,7 +116,6 @@ async function editAsset(id, inventory) {
       inventory.formatedDate,
       id,
     ];
-    console.log(inventory.formatedDate);
     return await connection.query(sql, values);
   } catch (error) {
     console.error('Erro ao editar itens no banco de dados', error);
@@ -143,10 +142,46 @@ async function deleteAsset(id) {
   }
 }
 
+async function getUserByEmail(email) {
+  const connection = await connect();
+  if (connection) {
+    try {
+      const results = await connection.query('SELECT * FROM users WHERE email=?', [email]);
+      return results;
+    } catch (error) {
+      console.error(error);
+      return null;
+    } finally {
+      connection.release();
+    }
+  }
+  return null;
+}
+
+async function insertUser(username, name, email, password) {
+  const connection = await connect();
+  if (connection) {
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const query = 'INSERT INTO users (username, name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)';
+      await connection.query(query, [username, name, email, hashedPassword]);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    } finally {
+      connection.release();
+    }
+  }
+  return false;
+}
+
 module.exports = {
   showInventory,
   createITAsset,
   editAsset,
   deleteAsset,
   checkItemExists,
+  getUserByEmail,
+  insertUser,
 };

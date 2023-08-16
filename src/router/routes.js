@@ -6,6 +6,7 @@ const app = express();
 const checkAuthentication = require('../middlewares/authentication');
 const inventoryController = require('../controllers/inventoryController');
 const authenticationController = require('../controllers/authenticationController');
+const registerController = require('../controllers/registerController');
 
 app.set('view engine', 'ejs');
 
@@ -27,5 +28,10 @@ router.get('/api/items/:id', checkAuthentication, inventoryController.searchItem
 router.get('/delete/:id', checkAuthentication, inventoryController.deleteItem);
 router.post('/addItem', checkAuthentication, inventoryController.addItem);
 router.post('/items/:id', checkAuthentication, inventoryController.editItem);
+
+// Rota de registro
+router.get('/register', checkAuthentication, registerController.renderRegisterPage);
+
+router.post('/register', checkAuthentication, registerController.registerUser);
 
 module.exports = router;
