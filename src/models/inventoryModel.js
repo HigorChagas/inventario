@@ -66,12 +66,14 @@ async function createITAsset(inventory) {
     user,
     serialNumber,
     formattedDate,
+    depreciatedValue,
+    currentAssetValue,
   } = inventory;
 
   try {
     connection = await connect();
 
-    const insertSql = 'INSERT INTO Inventario (patrimony, affiliate, description, model, department, assetValue, user, serialNumber, purchaseDate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);';
+    const insertSql = 'INSERT INTO Inventario (patrimony, affiliate, description, model, department, assetValue, user, serialNumber, purchaseDate, depreciatedValue, currentValue) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
     const values = [
       patrimony,
       affiliate,
@@ -82,6 +84,8 @@ async function createITAsset(inventory) {
       user,
       serialNumber,
       formattedDate,
+      depreciatedValue,
+      currentAssetValue,
     ];
 
     // eslint-disable-next-line max-len
@@ -104,7 +108,7 @@ async function editAsset(id, inventory) {
   try {
     connection = await connect();
 
-    const sql = 'UPDATE Inventario SET affiliate=?, description=?, model=?, department=?, assetValue=?, user=?, serialNumber=?, purchaseDate=? WHERE patrimony=?;';
+    const sql = 'UPDATE Inventario SET affiliate=?, description=?, model=?, department=?, assetValue=?, user=?, serialNumber=?, purchaseDate=?, depreciatedValue=?, currentValue=? WHERE patrimony=?;';
     const values = [
       inventory.affiliate,
       inventory.description,
@@ -113,7 +117,9 @@ async function editAsset(id, inventory) {
       inventory.assetValueFormated,
       inventory.user,
       inventory.serialNumber,
-      inventory.formatedDate,
+      inventory.formattedDate,
+      inventory.depreciatedValue,
+      inventory.currentAssetValue,
       id,
     ];
     return await connection.query(sql, values);

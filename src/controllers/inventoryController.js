@@ -68,6 +68,21 @@ const addItem = async (req, res) => {
 
   const currencyRegex = /[\D]/g;
   const assetValueFormated = Number(assetValue?.replace(currencyRegex, '').replace(',', '.'));
+
+  const monthlyFee = (0.20 / 360);
+  const finalDate = new Date();
+  const currentDate = new Date(formattedDate);
+  const differenceInMilliseconds = finalDate - currentDate;
+  const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+  let depreciatedValue;
+  if (differenceInDays >= 1800) {
+    depreciatedValue = assetValueFormated;
+  } else {
+    depreciatedValue = (assetValueFormated * monthlyFee * differenceInDays).toFixed(2);
+  }
+
+  const currentAssetValue = assetValueFormated - depreciatedValue;
+
   const inventoryData = {
     patrimony,
     affiliate,
@@ -78,6 +93,8 @@ const addItem = async (req, res) => {
     user,
     serialNumber,
     formattedDate,
+    depreciatedValue,
+    currentAssetValue,
   };
 
   try {
@@ -126,7 +143,7 @@ const editItem = async (req, res) => {
     } = req.body;
 
     const inputDate = req.body['modal-data'];
-    let formatedDate = null;
+    let formattedDate = null;
 
     if (!affiliate) {
       req.session.errorMessage = 'Por favor, selecione uma unidade válida.';
@@ -136,10 +153,23 @@ const editItem = async (req, res) => {
 
     if (inputDate) {
       const dateObj = new Date(inputDate);
-      [formatedDate] = dateObj.toISOString().split('T');
+      [formattedDate] = dateObj.toISOString().split('T');
     }
     const currencyRegex = /[\D]/g;
     const assetValueFormated = Number(assetValue?.replace(currencyRegex, '').replace(',', '.'));
+
+    const monthlyFee = (0.20 / 360);
+    const finalDate = new Date();
+    const currentDate = new Date(formattedDate);
+    const differenceInMilliseconds = finalDate - currentDate;
+    const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+    let depreciatedValue;
+    if (differenceInDays >= 1800) {
+      depreciatedValue = assetValueFormated;
+    } else {
+      depreciatedValue = (assetValueFormated * monthlyFee * differenceInDays).toFixed(2);
+    }
+    const currentAssetValue = assetValueFormated - depreciatedValue;
 
     await inventoryModel.editAsset(itemId, {
       affiliate,
@@ -149,7 +179,9 @@ const editItem = async (req, res) => {
       assetValueFormated,
       user,
       serialNumber,
-      formatedDate,
+      formattedDate,
+      depreciatedValue,
+      currentAssetValue,
     });
 
     req.session.successMessage = 'Item editado com sucesso';

@@ -31,9 +31,9 @@ app.set('trust proxy', 1);
 app.use(
   session({
     // cookie: {
-    //     secure: true,
-    //     maxAge: 1800000
-    //     },
+    //   secure: true,
+    //   maxAge: 180000000,
+    // },
     store: sessionStore,
     secret: sessionKey,
     resave: false,

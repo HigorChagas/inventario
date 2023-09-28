@@ -111,6 +111,8 @@
           <th scope="col">Valor da Compra</th>
           <th scope="col">Data da compra</th>
           <th scope="col">Nº de série</th>
+          <th scope="col">Depreciação</th>
+          <th scope="col">Valor Atual</th>
           <th scope="col">Ações</th>
         </thead>
         <tbody class="table-group-divider" id="tbody" aria-label="Items table" data-page="0">
@@ -134,8 +136,8 @@
               <th class="col col-lg-1">
                 <%= element.department %>
               </th>
-              <th class="col col-lg-2">
-                R$ <%= (element.assetValue / 100).toFixed(2).replace('.', ',') %>
+              <th class="col col-lg-1">
+                R$ <%= (element.assetValue / 100).toFixed(2).replace('.', ',' ) %>
               </th>
               <th class="col col-lg-1">
                 <% if (element.purchaseDate !==null) { %>
@@ -147,12 +149,18 @@
               <th class="col col-lg-1">
                 <%= element.serialNumber %>
               </th>
+              <th class="col col-lg-1">
+                <%= `R$ ${(element.depreciatedValue / 100).toFixed(2).replace('.', ',')}` %>
+              </th>
               <th class="col col-lg-2">
-                <button type="button" class="btn btn-sm btn-warning" id="edit-item-btn" data-bs-toggle="modal"
+                <%= `R$ ${(element.currentValue / 100).toFixed(2).replace('.', ',')}` %>
+              </th>
+              <th class="col col-lg-1">
+                <button type="button" class="btn btn-sm btn-warning mb-2" id="edit-item-btn" data-bs-toggle="modal"
                   data-bs-target="#editModal" data-item-id="<%= element.patrimony %>">
                   Editar
                 </button>
-                <a href="/delete/<%= element.patrimony %>" data-itemid="patrimony-id"
+                <a href="/delete/<%= element.patrimony %>" data-item-id="patrimony-id"
                   class="delete btn btn-sm btn-danger">Excluir</a>
               </th>
             </tr>
