@@ -31,7 +31,6 @@ router.post('/items/:id', checkAuthentication, inventoryController.editItem);
 
 // Rota de registro
 router.get('/register', checkAuthentication, registerController.renderRegisterPage);
-
 router.post('/register', checkAuthentication, registerController.registerUser);
 
 module.exports = router;

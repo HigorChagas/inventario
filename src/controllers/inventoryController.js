@@ -1,5 +1,6 @@
 const inventoryModel = require('../models/inventoryModel');
 const database = require('../database/database');
+const depreciationCalculator = require('../../public/js/depreciationCalculator');
 
 const renderInventory = async (req, res) => {
   const listing = await inventoryModel.showInventory();
@@ -69,18 +70,7 @@ const addItem = async (req, res) => {
   const currencyRegex = /[\D]/g;
   const assetValueFormated = Number(assetValue?.replace(currencyRegex, '').replace(',', '.'));
 
-  const monthlyFee = (0.20 / 360);
-  const finalDate = new Date();
-  const currentDate = new Date(formattedDate);
-  const differenceInMilliseconds = finalDate - currentDate;
-  const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-  let depreciatedValue;
-  if (differenceInDays >= 1800) {
-    depreciatedValue = assetValueFormated;
-  } else {
-    depreciatedValue = (assetValueFormated * monthlyFee * differenceInDays).toFixed(2);
-  }
-
+  const depreciatedValue = depreciationCalculator(formattedDate, assetValueFormated);
   const currentAssetValue = assetValueFormated - depreciatedValue;
 
   const inventoryData = {
@@ -158,17 +148,7 @@ const editItem = async (req, res) => {
     const currencyRegex = /[\D]/g;
     const assetValueFormated = Number(assetValue?.replace(currencyRegex, '').replace(',', '.'));
 
-    const monthlyFee = (0.20 / 360);
-    const finalDate = new Date();
-    const currentDate = new Date(formattedDate);
-    const differenceInMilliseconds = finalDate - currentDate;
-    const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-    let depreciatedValue;
-    if (differenceInDays >= 1800) {
-      depreciatedValue = assetValueFormated;
-    } else {
-      depreciatedValue = (assetValueFormated * monthlyFee * differenceInDays).toFixed(2);
-    }
+    const depreciatedValue = depreciationCalculator(formattedDate, assetValueFormated);
     const currentAssetValue = assetValueFormated - depreciatedValue;
 
     await inventoryModel.editAsset(itemId, {
